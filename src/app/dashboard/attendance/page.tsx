@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import ClockInOutCard from "@/app/dashboard/attendance/components/ClockInClockOut";
+import ClockInOutCard from "@/app/dashboard/components/ClockInOutCard";
 import { Attendance } from "@/types";
 
 export default function AttendancePage() {

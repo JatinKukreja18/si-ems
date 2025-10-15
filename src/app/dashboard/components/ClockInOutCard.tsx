@@ -1,6 +1,6 @@
 import { Attendance } from "@/types";
-import { Button } from "../../../../components/ui/button";
-import { Card } from "../../../../components/ui/card";
+import { Button } from "../../../components/ui/button";
+import { Card } from "../../../components/ui/card";
 import ShiftTimer from "./ShiftTimer";
 
 interface ClockInOutCardProps {
@@ -19,7 +19,7 @@ export default function ClockInOutCard({ activeSession, loading, onStartShift, o
   console.log(activeSession);
 
   return (
-    <Card className="  p-8 mb-6">
+    <Card className="p-6 md:p-8">
       <h2 className="text-xl font-semibold mb-4">Shift In/Out</h2>
 
       {isClocking && (

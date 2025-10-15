@@ -23,7 +23,7 @@ export default function ClockInOutCard({ activeSession, loading, onStartShift, o
       <h2 className="text-xl font-semibold mb-4">Shift In/Out</h2>
 
       {isClocking && (
-        <div className="mb-6 p-6 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border-2 border-blue-200">
+        <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border-2 border-blue-200">
           <p className="text-sm text-gray-600 mb-2">Current Shift Time:</p>
           {/* <p className="text-5xl font-bold text-blue-600 font-mono tracking-wider">{elapsedTime}</p> */}
           <ShiftTimer clockIn={activeSession.clock_in!} date={activeSession.date} />
@@ -34,7 +34,7 @@ export default function ClockInOutCard({ activeSession, loading, onStartShift, o
         <Button size={"lg"} className="md:flex-none flex-1" onClick={onStartShift} disabled={loading || !canStartShift}>
           {isClocking ? "Shift in Progress" : "Start Shift"}
         </Button>
-        <Button size={"lg"} className="md:flex-none flex-1" onClick={onEndShift} disabled={loading || !canClockOut}>
+        <Button size={"lg"} variant={"destructive"} className="md:flex-none flex-1" onClick={onEndShift} disabled={loading || !canClockOut}>
           End Shift
         </Button>
       </div>

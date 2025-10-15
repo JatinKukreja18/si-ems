@@ -16,5 +16,5 @@ export default function ShiftTimer({ clockIn, date }: { clockIn: string; date: s
     return () => clearInterval(interval);
   }, [clockIn, date]);
 
-  return <p className="font-mono text-5xl font-bold text-blue-600">{time}</p>;
+  return <p className="font-mono text-3xl font-bold text-blue-600">{time}</p>;
 }

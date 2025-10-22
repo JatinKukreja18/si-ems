@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [emailOrMobile, setEmailOrMobile] = useState("");
@@ -68,6 +69,12 @@ export default function LoginPage() {
             {loading ? "Loading..." : "Login"}
           </Button>
         </form>
+        <p className="text-center mt-4 text-sm text-muted-foreground">
+          Don't have an account?{" "}
+          <Link href="/signup" className="text-primary hover:underline">
+            Sign Up
+          </Link>
+        </p>
       </Card>
     </div>
   );

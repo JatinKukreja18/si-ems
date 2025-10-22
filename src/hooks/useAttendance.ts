@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { Attendance } from "@/types";
+import { checkLocationPermission } from "@/lib/geolocation";
 
 export function useAttendance(userId: string) {
   const [activeSession, setActiveSession] = useState<Attendance | null>(null);
@@ -61,6 +62,12 @@ export function useAttendance(userId: string) {
   };
 
   const startShift = async () => {
+    const locationCheck = await checkLocationPermission();
+
+    if (!locationCheck.allowed) {
+      alert(locationCheck.error || `You must be within 150m of office. Current distance: ${locationCheck.distance}m`);
+      return;
+    }
     setLoading(true);
     const now = new Date();
     await supabase.from("attendance").insert({

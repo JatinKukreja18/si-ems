@@ -37,20 +37,23 @@ export default function DashboardPage() {
 
   if (loading) return <div>Loading...</div>;
 
+  const isAdmin = user?.role === "admin";
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-1 ">Welcome, {user?.name}</h1>
       <p className="text-gray-600 text-sm mb-6 capitalize">Role: {user?.role}</p>
 
-      <div className="space-y-4 mb-6">
-        <AttendanceWidget userId={user?.id} />
-        <Link
-          href="/dashboard/attendance"
-          className="block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 text-center font-semibold"
-        >
-          Go to Attendance
-        </Link>
-      </div>
+      {!isAdmin && (
+        <div className="space-y-4 mb-6">
+          <AttendanceWidget userId={user?.id} />
+          <Link
+            href="/dashboard/attendance"
+            className="block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 text-center font-semibold"
+          >
+            Go to Attendance
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,11 +1,13 @@
 "use client";
 
+import { useAuth } from "@/contexts/AuthContext";
 import { checkLocationPermission } from "@/lib/geolocation";
 import { LOCATION_LABEL } from "@/lib/utils";
 import { User } from "@/types";
 import React, { useEffect, useState } from "react";
 
-export default function DashboardHeader({ user }: { user: User | null }) {
+export default function DashboardHeader() {
+  const { user } = useAuth();
   const [location, setLocation] = useState<string | undefined>();
   const [checking, setChecking] = useState(true);
 

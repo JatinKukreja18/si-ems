@@ -3,21 +3,14 @@
 import { Card } from "@/components/ui/card";
 import { useAttendance } from "@/hooks/useAttendance";
 import ClockInOutCard from "./ClockInOutCard";
-import { LOCATION_LABEL } from "@/lib/utils";
+import { formatTime, LOCATION_LABEL } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
-const formatTime = (time: string | null) => {
-  if (!time) return "In Progress";
-  const [hours, minutes] = time.split(":");
-  const hour = parseInt(hours);
-  const ampm = hour >= 12 ? "PM" : "AM";
-  const displayHour = hour % 12 || 12;
-  return `${displayHour}:${minutes} ${ampm}`;
-};
+export default function AttendanceWidget() {
+  const { user } = useAuth();
+  if (!user) return null;
 
-export default function AttendanceWidget({ userId }: { userId: string | undefined }) {
-  const { activeSession, todayAttendance, loading, startShift, endShift } = useAttendance(userId || "");
-
-  if (!userId) return null;
+  const { activeSession, todayAttendance, loading, startShift, endShift } = useAttendance(user.id || "");
 
   const todayTotalHours = todayAttendance.reduce((sum, record) => sum + (record.hours_worked || 0), 0);
 

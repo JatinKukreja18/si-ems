@@ -14,12 +14,14 @@ export default function Header() {
     router.push("/login");
   };
   return (
-    <div className="flex items-center justify-between px-4 py-2 border-b-1 border-gray-500 bg-foreground">
-      <span className="text-md md:text-xl font-bold uppercase text-background">SI EMS</span>
+    <div className="px-4 py-2 border-b-1 border-gray-500 bg-foreground">
+      <div className="container flex items-center justify-between m-auto">
+        <span className="text-md md:text-xl font-bold uppercase text-background">SI EMS</span>
 
-      <Button variant="secondary" size={"sm"} onClick={handleLogout}>
-        Logout
-      </Button>
+        <Button variant="secondary" size={"sm"} onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
     </div>
   );
 }

@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <>
       <Header />
-      {children}
+      <div className="container m-auto">{children}</div>
     </>
   );
 }

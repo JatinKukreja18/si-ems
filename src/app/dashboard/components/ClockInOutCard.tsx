@@ -15,9 +15,6 @@ export default function ClockInOutCard({ activeSession, loading, onStartShift, o
   const canClockOut = !!activeSession;
   const isClocking = !!activeSession;
 
-  console.log(loading);
-  console.log(activeSession);
-
   return (
     <Card className="p-6 md:p-8">
       <h2 className="text-xl font-semibold mb-4">Shift In/Out</h2>

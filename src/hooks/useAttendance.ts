@@ -49,7 +49,6 @@ export function useAttendance(userId: string) {
     const active = todayData?.find((a) => a.clock_in && !a.clock_out);
     setActiveSession(active || null);
 
-    // Get recent attendance
     const { data: recentData } = await supabase
       .from("attendance")
       .select("*")
@@ -74,6 +73,7 @@ export function useAttendance(userId: string) {
       employee_id: userId,
       date: now.toISOString().split("T")[0],
       clock_in: now.toTimeString().split(" ")[0],
+      location: locationCheck.location,
     });
     await fetchAttendance();
     setLoading(false);

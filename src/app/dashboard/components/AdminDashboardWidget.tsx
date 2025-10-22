@@ -28,6 +28,28 @@ export default function AdminDashboardWidget() {
     fetchTodayAttendance();
   }, []);
 
+  const calculateTotalHours = (shifts: Attendance[]) => {
+    return shifts.reduce((sum, shift) => {
+      if (shift.hours_worked) {
+        // Completed shift
+        return sum + shift.hours_worked;
+      } else if (shift.clock_in && !shift.clock_out) {
+        // Active shift - calculate current duration
+        const clockIn = new Date(`${shift.date}T${shift.clock_in}`);
+        const now = new Date();
+        const hours = (now.getTime() - clockIn.getTime()) / (1000 * 60 * 60);
+        return sum + hours;
+      }
+      return sum;
+    }, 0);
+  };
+
+  const formatHours = (totalHours: number) => {
+    const hours = Math.floor(totalHours);
+    const minutes = Math.round((totalHours - hours) * 60);
+    return `${hours}h ${minutes}m`;
+  };
+
   const fetchTodayAttendance = async () => {
     const today = new Date().toISOString().split("T")[0];
 
@@ -42,7 +64,7 @@ export default function AdminDashboardWidget() {
     // Combine data
     const employeesWithAttendance: EmployeeAttendance[] = employees.map((emp) => {
       const shifts = attendance?.filter((a) => a.employee_id === emp.id) || [];
-      const totalHours = shifts.reduce((sum, shift) => sum + (shift.hours_worked || 0), 0);
+      const totalHours = calculateTotalHours(shifts);
       const isActive = shifts.some((s) => s.clock_in && !s.clock_out);
 
       return {
@@ -63,7 +85,7 @@ export default function AdminDashboardWidget() {
     <Card className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Today's Employee Attendance</h2>
-        <Link href="/dashboard/admin/attendance">
+        <Link href="/dashboard/admin/attendance" className="hidden sm:block">
           <Button variant="outline" size="sm">
             View All
           </Button>
@@ -84,7 +106,7 @@ export default function AdminDashboardWidget() {
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">Total Hours</p>
                 <p className={`text-lg font-bold ${empData.totalHours > 10 ? "text-orange-600" : "text-green-600"}`}>
-                  {empData.totalHours.toFixed(2)}h
+                  {formatHours(empData.totalHours)}
                 </p>
               </div>
 
@@ -98,6 +120,11 @@ export default function AdminDashboardWidget() {
 
         {employeesData.length === 0 && <p className="text-center text-muted-foreground py-8">No employees found</p>}
       </div>
+      <Link href="/dashboard/admin/attendance" className="block sm:hidden">
+        <Button variant="outline" size="lg" className="w-full">
+          View All
+        </Button>
+      </Link>
     </Card>
   );
 }

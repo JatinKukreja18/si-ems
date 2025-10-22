@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { useAttendance } from "@/hooks/useAttendance";
 import ClockInOutCard from "./ClockInOutCard";
 
-// ⭐ NEW - Helper function to format time
 const formatTime = (time: string | null) => {
   if (!time) return "In Progress";
   const [hours, minutes] = time.split(":");
@@ -32,7 +31,6 @@ export default function AttendanceWidget({ userId }: { userId: string | undefine
             {todayAttendance.map((record, idx) => (
               <div key={record.id} className="flex justify-between items-center p-3 bg-muted/50 rounded">
                 <span className="font-semibold text-sm">Shift {todayAttendance.length - idx}</span>
-                {/* ⭐ CHANGED - using formatTime */}
                 <span className="text-sm text-muted-foreground">
                   {formatTime(record.clock_in)} - {formatTime(record.clock_out)}
                 </span>

@@ -6,13 +6,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AttendanceWidget from "./components/AttendanceWidget";
 import AdminDashboardWidget from "./components/AdminDashboardWidget";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
+import DashboardHeader from "./components/DashboardHeader";
+import { User } from "@/types";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -41,8 +36,7 @@ export default function DashboardPage() {
   const isAdmin = user?.role === "admin";
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-1 ">Welcome, {user?.name}</h1>
-      <p className="text-gray-600 text-sm mb-6 capitalize">Role: {user?.role}</p>
+      <DashboardHeader user={user} />
 
       {isAdmin ? (
         <AdminDashboardWidget />

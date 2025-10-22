@@ -25,7 +25,9 @@ export default function AttendanceWidget({ hideTodayShifts = false }: { hideToda
             {todayAttendance.map((record, idx) => (
               <div key={record.id} className="flex flex-wrap justify-between items-center p-3 bg-muted/50 rounded">
                 <span className="font-semibold text-sm w-1/2 sm:w-auto">Shift {todayAttendance.length - idx}</span>
-                <span className="text-sm text-muted-foreground text-right w-1/2 sm:w-auto">{LOCATION_LABEL[record.location]}</span>
+                {record.location && (
+                  <span className="text-sm text-muted-foreground text-right w-1/2 sm:w-auto">{LOCATION_LABEL[record.location]}</span>
+                )}
                 <span className="text-sm text-muted-foreground min-w-[300px] text-left">
                   {formatTime(record.clock_in)} - {formatTime(record.clock_out)}
                 </span>

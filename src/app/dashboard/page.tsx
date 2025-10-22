@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AttendanceWidget from "./components/AttendanceWidget";
+import AdminDashboardWidget from "./components/AdminDashboardWidget";
 
 interface User {
   id: string;
@@ -43,7 +44,9 @@ export default function DashboardPage() {
       <h1 className="text-xl font-bold mb-1 ">Welcome, {user?.name}</h1>
       <p className="text-gray-600 text-sm mb-6 capitalize">Role: {user?.role}</p>
 
-      {!isAdmin && (
+      {isAdmin ? (
+        <AdminDashboardWidget />
+      ) : (
         <div className="space-y-4 mb-6">
           <AttendanceWidget userId={user?.id} />
           <Link

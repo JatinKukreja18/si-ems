@@ -15,27 +15,6 @@ export default function AttendancePage() {
     fetchAttendance();
   }, []);
 
-  // useEffect(() => {
-  //   // if (!activeSession?.clock_in || activeSession?.clock_out) {
-  //   //   setElapsedTime("00:00:00");
-  //   //   return;
-  //   // }
-
-  //   const interval = setInterval(() => {
-  //     const clockInTime = new Date(`${activeSession.date}T${activeSession.clock_in}`);
-  //     const now = new Date();
-  //     const diff = now.getTime() - clockInTime.getTime();
-
-  //     const hours = Math.floor(diff / (1000 * 60 * 60));
-  //     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  //     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  //     setElapsedTime(`${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
-  //   }, 1000);
-
-  //   return () => clearInterval(interval);
-  // }, [activeSession]);
-
   const fetchAttendance = async () => {
     const { data: session } = await supabase.auth.getSession();
     if (!session.session) return;
@@ -143,32 +122,6 @@ export default function AttendancePage() {
       <ClockInOutCard loading={loading} onEndShift={handleClockOut} onStartShift={handleClockIn} activeSession={activeSession} />
 
       <div className="p-8 mb-6 border-2 rounded-lg shadow-lg">
-        {/* <h2 className="mb-4 text-xl font-semibold">Clock In/Out</h2> */}
-
-        {/* {isClocking && (
-          <div className="p-6 mb-6 border-2 border-blue-200 rounded-lg bg-gradient-to-r from-blue-50 to-green-50">
-            <p className="mb-2 text-sm text-gray-600">Current Session Time:</p>
-            <p className="font-mono text-5xl font-bold tracking-wider text-blue-600">{elapsedTime}</p>
-          </div>
-        )}
-
-        <div className="flex gap-4 mb-6">
-          <button
-            onClick={handleClockIn}
-            disabled={loading || !canClockIn}
-            className="px-8 py-3 text-lg font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {canClockIn ? "Start New Session" : "Session Active"}
-          </button>
-          <button
-            onClick={handleClockOut}
-            disabled={loading || !canClockOut}
-            className="px-8 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            End Session
-          </button>
-        </div> */}
-
         {todayAttendance.length > 0 && (
           <div className="p-4 rounded-lg bg-gray-50">
             <p className="mb-3 text-sm text-gray-600">Today's Sessions:</p>

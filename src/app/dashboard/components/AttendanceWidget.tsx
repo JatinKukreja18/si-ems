@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { useAttendance } from "@/hooks/useAttendance";
 import ClockInOutCard from "./ClockInOutCard";
+import { LOCATION_LABEL } from "@/lib/utils";
 
 const formatTime = (time: string | null) => {
   if (!time) return "In Progress";
@@ -29,9 +30,10 @@ export default function AttendanceWidget({ userId }: { userId: string | undefine
           <p className="text-md text-muted-foreground">Today's Shifts:</p>
           <div className="space-y-2 mb-2">
             {todayAttendance.map((record, idx) => (
-              <div key={record.id} className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                <span className="font-semibold text-sm">Shift {todayAttendance.length - idx}</span>
-                <span className="text-sm text-muted-foreground">
+              <div key={record.id} className="flex flex-wrap justify-between items-center p-3 bg-muted/50 rounded">
+                <span className="font-semibold text-sm w-1/2 sm:w-auto">Shift {todayAttendance.length - idx}</span>
+                <span className="text-sm text-muted-foreground text-right w-1/2 sm:w-auto">{LOCATION_LABEL[record.location]}</span>
+                <span className="text-sm text-muted-foreground min-w-[300px] text-left">
                   {formatTime(record.clock_in)} - {formatTime(record.clock_out)}
                 </span>
                 <span className={`font-semibold ${record.hours_worked && record.hours_worked > 10 ? "text-orange-600" : "text-green-600"}`}>

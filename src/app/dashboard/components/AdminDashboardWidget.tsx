@@ -64,6 +64,8 @@ export default function AdminDashboardWidget() {
     // Combine data
     const employeesWithAttendance: EmployeeAttendance[] = employees.map((emp) => {
       const shifts = attendance?.filter((a) => a.employee_id === emp.id) || [];
+      console.log(shifts);
+
       const totalHours = calculateTotalHours(shifts);
       const isActive = shifts.some((s) => s.clock_in && !s.clock_out);
 
@@ -98,6 +100,13 @@ export default function AdminDashboardWidget() {
             <div className="flex-1">
               <p className="font-semibold">{empData.employee.name}</p>
               <p className="text-sm text-muted-foreground">{empData.employee.email}</p>
+            </div>
+            <div className="flex-1">
+              {empData.todayShifts.length > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  {empData.todayShifts[0].location === "SPM" ? "South Point Mall" : "AIPL Joy Central"}
+                </p>
+              )}
             </div>
 
             <div className="flex items-center gap-4">

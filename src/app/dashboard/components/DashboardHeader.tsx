@@ -1,13 +1,9 @@
 "use client";
 
 import { checkLocationPermission } from "@/lib/geolocation";
+import { LOCATION_LABEL } from "@/lib/utils";
 import { User } from "@/types";
 import React, { useEffect, useState } from "react";
-
-const LOCATION_LABEL: Record<string, string> = {
-  JC: "AIPL Joy Central",
-  SPM: "South Point Mall",
-};
 
 export default function DashboardHeader({ user }: { user: User | null }) {
   const [location, setLocation] = useState<string | undefined>();

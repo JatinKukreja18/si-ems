@@ -6,7 +6,7 @@ import ClockInOutCard from "./ClockInOutCard";
 import { formatTime, LOCATION_LABEL } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 
-export default function AttendanceWidget() {
+export default function AttendanceWidget({ hideTodayShifts = false }: { hideTodayShifts?: boolean }) {
   const { user } = useAuth();
   if (!user) return null;
 
@@ -18,7 +18,7 @@ export default function AttendanceWidget() {
     <div className="space-y-4">
       <ClockInOutCard activeSession={activeSession} loading={loading} onStartShift={startShift} onEndShift={endShift} />
 
-      {todayAttendance.length > 0 && (
+      {!hideTodayShifts && todayAttendance.length > 0 && (
         <Card className="p-4">
           <p className="text-md text-muted-foreground">Today's Shifts:</p>
           <div className="space-y-2 mb-2">

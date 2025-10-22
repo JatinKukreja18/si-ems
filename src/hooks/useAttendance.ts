@@ -96,7 +96,7 @@ export function useAttendance(userId: string) {
     const locationCheck = await checkLocationPermission();
 
     if (!locationCheck.allowed) {
-      alert(locationCheck.error || `You must be within 150m of office. Current distance: ${locationCheck.distance}m`);
+      alert(locationCheck.error || `You are not at office location`);
       return;
     }
     setLoading(true);

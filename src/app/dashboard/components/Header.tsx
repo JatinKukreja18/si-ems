@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import React from "react";
@@ -16,7 +17,9 @@ export default function Header() {
   return (
     <div className="px-4 py-2 border-b-1 border-gray-500 bg-foreground">
       <div className="container flex items-center justify-between m-auto">
-        <span className="text-md md:text-xl font-bold uppercase text-background">SI EMS</span>
+        <Link href={"/"} className="text-md md:text-xl font-bold uppercase text-background">
+          SI EMS
+        </Link>
 
         <Button variant="secondary" size={"sm"} onClick={handleLogout}>
           Logout

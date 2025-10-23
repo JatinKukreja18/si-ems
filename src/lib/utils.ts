@@ -58,6 +58,6 @@ export const formatDuration = (hours: number | null) => {
 export const getTodayDate = () => {
   const today = new Date();
   const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(today);
+  const formattedDate = new Intl.DateTimeFormat("en-US", options as Intl.DateTimeFormatOptions).format(today);
   return formattedDate;
 };

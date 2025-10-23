@@ -21,7 +21,7 @@ export default function AttendancePage() {
 
   return (
     <div className="max-w-6xl p-2 mx-auto">
-      <header className="mb-8">
+      <header className="mb-8 mt-4">
         <div className="flex items-center justify-between">
           <h1 className=" text-3xl font-bold">Attendance</h1>
           {isAdmin && (

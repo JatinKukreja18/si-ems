@@ -78,7 +78,7 @@ export default function AdminDashboardWidget() {
     <Card className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Today's Employee Attendance</h2>
-        <Link href="/dashboard/admin/attendance" className="hidden sm:block">
+        <Link href="/dashboard/attendance" className="hidden sm:block">
           <Button variant="outline" size="sm">
             View All
           </Button>
@@ -108,7 +108,7 @@ export default function AdminDashboardWidget() {
               {empData.isActive && <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Active</span>}
 
               <div className="text-right">
-                <p className="text-sm text-muted-foreground">Total Hours</p>
+                <p className="text-sm text-muted-foreground">Total Time</p>
                 <p className={`text-lg font-bold ${empData.totalHours > 10 ? "text-orange-600" : "text-green-600"}`}>
                   {formatHours(empData.totalHours)}
                 </p>
@@ -124,7 +124,7 @@ export default function AdminDashboardWidget() {
 
         {employeesData.length === 0 && <p className="text-center text-muted-foreground py-8">No employees found</p>}
       </div>
-      <Link href="/dashboard/admin/attendance" className="block sm:hidden">
+      <Link href="/dashboard/attendance" className="block sm:hidden">
         <Button variant="outline" size="lg" className="w-full">
           View All
         </Button>

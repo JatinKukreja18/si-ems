@@ -19,3 +19,12 @@ export interface Attendance {
   created_at: string;
   updated_at: string;
 }
+
+export type Employee = Pick<User, "id" | "name" | "email">;
+
+export interface EmployeeAttendance {
+  employee: Employee;
+  todayShifts: Attendance[];
+  totalHours: number;
+  isActive: boolean;
+}

@@ -25,7 +25,6 @@ export default function SignupPage() {
     setError("");
 
     try {
-      // Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -40,14 +39,13 @@ export default function SignupPage() {
       if (authError) throw authError;
 
       if (authData.user) {
-        // Add to users table
         const { error: dbError } = await supabase.from("users").insert({
           id: authData.user.id,
           email,
           name,
           mobile,
           role: "employee",
-          base_salary: 0, // Admin will set this later
+          base_salary: 0,
         });
 
         if (dbError) throw dbError;

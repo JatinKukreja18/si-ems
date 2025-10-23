@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Attendance } from "@/types";
+import { useEmployees } from "@/hooks/useEmployees";
+import { formatHours } from "@/lib/utils";
 
 interface Employee {
   id: string;
@@ -23,10 +25,10 @@ interface EmployeeAttendance {
 export default function AdminDashboardWidget() {
   const [employeesData, setEmployeesData] = useState<EmployeeAttendance[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const { employeesData: employees } = useEmployees();
   useEffect(() => {
     fetchTodayAttendance();
-  }, []);
+  }, [employees]);
 
   const calculateTotalHours = (shifts: Attendance[]) => {
     return shifts.reduce((sum, shift) => {
@@ -44,24 +46,13 @@ export default function AdminDashboardWidget() {
     }, 0);
   };
 
-  const formatHours = (totalHours: number) => {
-    const hours = Math.floor(totalHours);
-    const minutes = Math.round((totalHours - hours) * 60);
-    return `${hours}h ${minutes}m`;
-  };
-
   const fetchTodayAttendance = async () => {
     const today = new Date().toISOString().split("T")[0];
 
-    // Get all employees
-    const { data: employees } = await supabase.from("users").select("id, name, email").eq("role", "employee");
-
     if (!employees) return;
 
-    // Get today's attendance for all employees
     const { data: attendance } = await supabase.from("attendance").select("*").eq("date", today).order("clock_in", { ascending: false });
 
-    // Combine data
     const employeesWithAttendance: EmployeeAttendance[] = employees.map((emp) => {
       const shifts = attendance?.filter((a) => a.employee_id === emp.id) || [];
       console.log(shifts);
@@ -96,7 +87,11 @@ export default function AdminDashboardWidget() {
 
       <div className="space-y-3">
         {employeesData.map((empData) => (
-          <div key={empData.employee.id} className="flex justify-between items-center p-4 bg-muted/50 rounded-lg">
+          <Link
+            href={"/dashboard/attendance?user=" + empData.employee.id}
+            key={empData.employee.id}
+            className="flex justify-between items-center p-4 bg-muted/50 rounded-lg"
+          >
             <div className="flex-1">
               <p className="font-semibold">{empData.employee.name}</p>
               <p className="text-sm text-muted-foreground">{empData.employee.email}</p>
@@ -124,7 +119,7 @@ export default function AdminDashboardWidget() {
                 <p className="text-lg font-bold">{empData.todayShifts.length}</p>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
 
         {employeesData.length === 0 && <p className="text-center text-muted-foreground py-8">No employees found</p>}

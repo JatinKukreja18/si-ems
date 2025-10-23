@@ -7,11 +7,10 @@ import DashboardHeader from "./components/DashboardHeader";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
+  const { loading, isAdmin } = useAuth();
 
   if (loading) return <div>Loading...</div>;
 
-  const isAdmin = user?.role === "admin";
   return (
     <div className="py-4">
       <DashboardHeader />

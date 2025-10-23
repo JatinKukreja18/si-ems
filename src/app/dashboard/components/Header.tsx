@@ -9,7 +9,6 @@ import React from "react";
 export default function Header() {
   const router = useRouter();
 
-  // ⭐ NEW - Add this handler
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/login");

@@ -9,6 +9,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   refreshUser: () => Promise<void>;
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,7 +37,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     fetchUser();
 
-    // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
         setUser(null);
@@ -51,7 +51,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  return <AuthContext.Provider value={{ user, loading, refreshUser: fetchUser }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, loading, refreshUser: fetchUser, isAdmin: user?.role === "admin" }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

@@ -33,3 +33,9 @@ export const formatTime = (time: string | null) => {
   const displayHour = hour % 12 || 12;
   return `${displayHour}:${minutes} ${ampm}`;
 };
+
+export const formatHours = (totalHours: number) => {
+  const hours = Math.floor(totalHours);
+  const minutes = Math.round((totalHours - hours) * 60);
+  return `${hours}h ${minutes}m`;
+};

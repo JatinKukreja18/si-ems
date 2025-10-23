@@ -24,21 +24,22 @@ export default function AttendancePage() {
       <header className="mb-8">
         <div className="flex items-center justify-between">
           <h1 className=" text-3xl font-bold">Attendance</h1>
-
-          <Select defaultValue={selectedUser || ""} onValueChange={onEmployeeChange}>
-            <SelectTrigger className="w-[180px] bg-white">
-              <SelectValue placeholder="Select Employee" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {employeesData.map((employee) => (
-                  <SelectItem key={employee.id} value={employee.id}>
-                    {employee.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          {isAdmin && (
+            <Select defaultValue={selectedUser || ""} onValueChange={onEmployeeChange}>
+              <SelectTrigger className="w-[180px] bg-white">
+                <SelectValue placeholder="Select Employee" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {employeesData.map((employee) => (
+                    <SelectItem key={employee.id} value={employee.id}>
+                      {employee.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
         </div>
       </header>
 

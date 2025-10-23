@@ -1,11 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useAuth } from "@/contexts/AuthContext";
 import { useAttendance } from "@/hooks/useAttendance";
-import { formatTime, LOCATION_LABEL, MONTHS } from "@/lib/utils";
+import { MONTHS } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import ShiftTimeRow from "../../components/ShiftTimeRow";
 
 export default function AttendanceHistory({ userId }: { userId: string }) {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
@@ -54,17 +54,7 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
             <div className="w-full flex flex-col   gap-2">
               <>{console.log(record.shifts)}</>
               {record.shifts?.map((shift) => (
-                <div key={shift.id} className="w-full flex justify-between p-2 bg-gray-50 hover:bg-gray-100 rounded ">
-                  <span className="text-gray-600">
-                    {formatTime(shift.clock_in)} - {formatTime(shift.clock_out || "N/A")}
-                  </span>
-                  {shift.location && <span className="text-gray-600">{LOCATION_LABEL[shift.location]}</span>}
-                  <span
-                    className={`font-bold text-lg ${shift.hours_worked && shift.hours_worked > 10 ? "text-orange-600" : "text-green-600"}`}
-                  >
-                    {shift.hours_worked ? `${shift.hours_worked.toFixed(2)}h` : "-"}
-                  </span>
-                </div>
+                <ShiftTimeRow record={shift} key={shift.id} />
               ))}
             </div>
           </div>

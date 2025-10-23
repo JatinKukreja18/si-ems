@@ -26,10 +26,10 @@ export const MONTHS: Record<string, string> = {
 };
 
 export const formatTime = (time: string | null) => {
-  if (!time) return "N/A";
+  if (!time) return "in progress";
   const [hours, minutes] = time.split(":");
   const hour = parseInt(hours);
-  const ampm = hour >= 12 ? "PM" : "AM";
+  const ampm = hour >= 12 ? "pm" : "am";
   const displayHour = hour % 12 || 12;
   return `${displayHour}:${minutes} ${ampm}`;
 };
@@ -38,4 +38,26 @@ export const formatHours = (totalHours: number) => {
   const hours = Math.floor(totalHours);
   const minutes = Math.round((totalHours - hours) * 60);
   return `${hours}h ${minutes}m`;
+};
+
+export const formatDuration = (hours: number | null) => {
+  if (!hours) return "-";
+  const totalMinutes = Math.round(hours * 60);
+
+  if (totalMinutes < 60) {
+    return `${totalMinutes}m`;
+  }
+
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+
+  if (m === 0) return `${h}h`;
+  return `${h}h ${m}m`;
+};
+
+export const getTodayDate = () => {
+  const today = new Date();
+  const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(today);
+  return formattedDate;
 };

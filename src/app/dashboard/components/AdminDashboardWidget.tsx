@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Attendance } from "@/types";
 import { useEmployees } from "@/hooks/useEmployees";
-import { formatHours } from "@/lib/utils";
+import { ASSIGNED_TIME, formatHours, getTodayDate } from "@/lib/utils";
+import ShiftTimeRow from "./ShiftTimeRow";
+import { ArrowUpRight } from "lucide-react";
 
 interface Employee {
   id: string;
@@ -75,60 +77,62 @@ export default function AdminDashboardWidget() {
   if (loading) return <Card className="p-6">Loading...</Card>;
 
   return (
-    <Card className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Today's Employee Attendance</h2>
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">{getTodayDate()}</h2>
         <Link href="/dashboard/attendance" className="hidden sm:block">
-          <Button variant="outline" size="sm">
-            View All
+          <Button size="sm">
+            View All Attendance <ArrowUpRight />
           </Button>
         </Link>
       </div>
 
       <div className="space-y-3">
         {employeesData.map((empData) => (
-          <Link
-            href={"/dashboard/attendance?user=" + empData.employee.id}
-            key={empData.employee.id}
-            className="flex justify-between items-center p-4 bg-muted/50 rounded-lg"
-          >
-            <div className="flex-1">
-              <p className="font-semibold">{empData.employee.name}</p>
-              <p className="text-sm text-muted-foreground">{empData.employee.email}</p>
-            </div>
-            <div className="flex-1">
-              {empData.todayShifts.length > 0 && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {empData.todayShifts[0].location === "SPM" ? "South Point Mall" : "AIPL Joy Central"}
-                </p>
-              )}
-            </div>
-
-            <div className="flex items-center gap-4">
-              {empData.isActive && <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Active</span>}
-
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground">Total Time</p>
-                <p className={`text-lg font-bold ${empData.totalHours > 10 ? "text-orange-600" : "text-green-600"}`}>
-                  {formatHours(empData.totalHours)}
-                </p>
-              </div>
-
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground">Shifts</p>
-                <p className="text-lg font-bold">{empData.todayShifts.length}</p>
-              </div>
-            </div>
-          </Link>
+          <EmployeeRow data={empData} />
         ))}
 
         {employeesData.length === 0 && <p className="text-center text-muted-foreground py-8">No employees found</p>}
       </div>
       <Link href="/dashboard/attendance" className="block sm:hidden">
-        <Button variant="outline" size="lg" className="w-full">
-          View All
+        <Button size="lg" className="w-full">
+          View All Attendance <ArrowUpRight />
         </Button>
+      </Link>
+    </div>
+  );
+}
+
+const EmployeeRow = ({ data }: { data: EmployeeAttendance }) => {
+  const { employee, todayShifts, totalHours } = data;
+  const difference = totalHours - ASSIGNED_TIME;
+
+  return (
+    <Card className="p-0">
+      <Link href={"/dashboard/attendance?user=" + employee.id} key={employee.id} className="flex flex-col gap-2 bg-muted/50 rounded-lg">
+        <div className="p-4 pb-2 flex justify-between">
+          <p className="font-semibold capitalize">{employee.name.toLowerCase()}</p>
+          {data.isActive && (
+            <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium ml-auto mr-1">Active</span>
+          )}
+          {totalHours !== 0 && difference !== 0 && (
+            <p className={`font-semibold text-right text-sm ${difference < 0 ? "text-orange-600" : "text-green-600"}`}>
+              {difference < 0 ? "-" : "+"}
+              {formatHours(Math.abs(difference), true)}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-4 px-1 mb-4">
+          {todayShifts.map((shift) => {
+            return (
+              <>
+                <ShiftTimeRow record={shift} />
+              </>
+            );
+          })}
+        </div>
       </Link>
     </Card>
   );
-}
+};

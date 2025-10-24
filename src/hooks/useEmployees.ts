@@ -11,7 +11,11 @@ export function useEmployees() {
   }, []);
 
   const fetchEmployees = async () => {
-    const { data: employees } = await supabase.from("users").select("id, name, email").eq("role", "employee");
+    const { data: employees } = await supabase
+      .from("users")
+      .select("id, name, email")
+      .eq("role", "employee")
+      .order("name", { ascending: true });
 
     if (!employees) return;
 

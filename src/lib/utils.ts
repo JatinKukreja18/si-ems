@@ -5,6 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const ASSIGNED_TIME = 10;
+
 export const LOCATION_LABEL: Record<string, string> = {
   JC: "AIPL Joy Central",
   SPM: "South Point Mall",
@@ -34,9 +36,10 @@ export const formatTime = (time: string | null) => {
   return `${displayHour}:${minutes} ${ampm}`;
 };
 
-export const formatHours = (totalHours: number) => {
+export const formatHours = (totalHours: number, hideZeroHours?: boolean) => {
   const hours = Math.floor(totalHours);
   const minutes = Math.round((totalHours - hours) * 60);
+  if (hideZeroHours && hours === 0) return `${minutes}m`;
   return `${hours}h ${minutes}m`;
 };
 
@@ -52,6 +55,7 @@ export const formatDuration = (hours: number | null) => {
   const m = totalMinutes % 60;
 
   if (m === 0) return `${h}h`;
+
   return `${h}h ${m}m`;
 };
 

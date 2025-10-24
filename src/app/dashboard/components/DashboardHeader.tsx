@@ -7,7 +7,7 @@ import { User } from "@/types";
 import React, { useEffect, useState } from "react";
 
 export default function DashboardHeader() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [location, setLocation] = useState<string | undefined>();
   const [checking, setChecking] = useState(true);
 
@@ -38,7 +38,7 @@ export default function DashboardHeader() {
         <h1 className="text-xl font-bold mb-1 ">Welcome, {user?.name}</h1>
         <p className="text-gray-600 text-sm capitalize">Role: {user?.role}</p>
       </div>
-      <div className="sm:ml-auto text-md">Location: {locationText}</div>
+      {!isAdmin && <div className="sm:ml-auto text-md">Location: {locationText}</div>}
     </div>
   );
 }

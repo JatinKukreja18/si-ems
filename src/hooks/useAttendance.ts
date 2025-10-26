@@ -101,6 +101,21 @@ export function useAttendance(userId: string) {
     }
     setLoading(true);
     const now = new Date();
+
+    const { data: existing } = await supabase
+      .from("attendance")
+      .select("id")
+      .eq("employee_id", userId)
+      .eq("date", now)
+      .is("clock_out", null)
+      .single();
+
+    if (existing) {
+      alert("You have one active shift");
+      setLoading(false);
+      return;
+    }
+
     await supabase.from("attendance").insert({
       employee_id: userId,
       date: now.toISOString().split("T")[0],

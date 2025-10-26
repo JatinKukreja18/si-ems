@@ -54,7 +54,6 @@ export async function checkLocationPermission(): Promise<{
 
     const isSPM = spmDistance <= ALLOWED_RADIUS_METERS;
     const isJC = jcDistance <= ALLOWED_RADIUS_METERS;
-    console.log(isJC);
 
     return {
       allowed: isSPM || isJC,

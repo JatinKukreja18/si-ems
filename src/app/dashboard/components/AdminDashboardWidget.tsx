@@ -112,14 +112,17 @@ const EmployeeRow = ({ data }: { data: EmployeeAttendance }) => {
       <Link href={"/dashboard/attendance?user=" + employee.id} key={employee.id} className="flex flex-col gap-2 bg-muted/50 rounded-lg">
         <div className="p-4 pb-2 flex justify-between">
           <p className="font-semibold capitalize">{employee.name.toLowerCase()}</p>
-          {data.isActive && (
+          {data.isActive ? (
             <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium ml-auto mr-1">Active</span>
-          )}
-          {totalHours !== 0 && difference !== 0 && (
-            <p className={`font-semibold text-right text-sm ${difference < 0 ? "text-orange-600" : "text-green-600"}`}>
-              {difference < 0 ? "-" : "+"}
-              {formatHours(Math.abs(difference), true)}
-            </p>
+          ) : (
+            <>
+              {totalHours !== 0 && difference !== 0 && (
+                <p className={`font-semibold text-right text-sm ${difference < 0 ? "text-orange-600" : "text-green-600"}`}>
+                  {difference < 0 ? "-" : "+"}
+                  {formatHours(Math.abs(difference), true)}
+                </p>
+              )}
+            </>
           )}
         </div>
 

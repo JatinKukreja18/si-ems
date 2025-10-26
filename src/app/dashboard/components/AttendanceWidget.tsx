@@ -5,6 +5,7 @@ import { useAttendance } from "@/hooks/useAttendance";
 import ClockInOutCard from "./ClockInOutCard";
 import { useAuth } from "@/contexts/AuthContext";
 import ShiftTimeRow from "./ShiftTimeRow";
+import { formatDuration } from "@/lib/utils";
 
 export default function AttendanceWidget({ hideTodayShifts = false }: { hideTodayShifts?: boolean }) {
   const { user } = useAuth();
@@ -29,7 +30,7 @@ export default function AttendanceWidget({ hideTodayShifts = false }: { hideToda
           <div className="pt-4 border-t flex justify-between items-center">
             <span className="font-bold text-lg">Total Today:</span>
             <span className={`font-bold text-lg ${todayTotalHours > 10 ? "text-orange-600" : "text-green-600"}`}>
-              {todayTotalHours.toFixed(2)}h
+              {formatDuration(todayTotalHours)}
             </span>
           </div>
         </Card>

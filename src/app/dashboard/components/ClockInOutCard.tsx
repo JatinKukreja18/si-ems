@@ -13,7 +13,7 @@ interface ClockInOutCardProps {
 
 export default function ClockInOutCard({ activeSession, loading, onStartShift, onEndShift }: ClockInOutCardProps) {
   const canStartShift = !activeSession;
-  const canClockOut = !!activeSession;
+  const canEndShift = !!activeSession;
   const isClocking = !!activeSession;
 
   return (
@@ -31,7 +31,7 @@ export default function ClockInOutCard({ activeSession, loading, onStartShift, o
         <Button size={"lg"} className="md:flex-none flex-1" onClick={onStartShift} disabled={loading || !canStartShift}>
           {isClocking ? "Shift in Progress" : "Start Shift"}
         </Button>
-        <Button size={"lg"} variant={"destructive"} className="md:flex-none flex-1" onClick={onEndShift} disabled={loading || !canClockOut}>
+        <Button size={"lg"} variant={"destructive"} className="md:flex-none flex-1" onClick={onEndShift} disabled={loading || !canEndShift}>
           End Shift
         </Button>
       </div>

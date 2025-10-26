@@ -30,7 +30,6 @@ export default function DashboardHeader() {
   ) : (
     <span className="text-red-500">You are not at Work Location</span>
   );
-  console.log(location);
 
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between  mb-6 gap-4">

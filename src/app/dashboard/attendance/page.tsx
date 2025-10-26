@@ -22,18 +22,18 @@ export default function AttendancePage() {
   return (
     <div className="max-w-6xl p-2 mx-auto">
       <header className="mb-8 mt-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 flex-wrap justify-between">
           <h1 className=" text-3xl font-bold">Attendance</h1>
           {isAdmin && (
             <Select defaultValue={selectedUser || ""} onValueChange={onEmployeeChange}>
-              <SelectTrigger className="w-[180px] bg-white">
-                <SelectValue placeholder="Select Employee" />
+              <SelectTrigger className="w-full sm:w-[200px] bg-white capitalize">
+                <SelectValue placeholder="Select Employee" className="capitalize" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {employeesData.map((employee) => (
-                    <SelectItem key={employee.id} value={employee.id}>
-                      {employee.name}
+                    <SelectItem key={employee.id} value={employee.id} className="capitalize">
+                      {employee.name.toLowerCase()}
                     </SelectItem>
                   ))}
                 </SelectGroup>

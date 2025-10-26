@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Attendance } from "@/types";
 import { useEmployees } from "@/hooks/useEmployees";
-import { ASSIGNED_TIME, formatHours, getTodayDate } from "@/lib/utils";
+import { calculateTotalHours, getTodayDate } from "@/lib/utils";
 import ShiftTimeRow from "./ShiftTimeRow";
 import { ArrowUpRight } from "lucide-react";
+import OvertimeLabel from "./OvertimeLabel";
 
 interface Employee {
   id: string;
@@ -31,22 +32,6 @@ export default function AdminDashboardWidget() {
   useEffect(() => {
     fetchTodayAttendance();
   }, [employees]);
-
-  const calculateTotalHours = (shifts: Attendance[]) => {
-    return shifts.reduce((sum, shift) => {
-      if (shift.hours_worked) {
-        // Completed shift
-        return sum + shift.hours_worked;
-      } else if (shift.clock_in && !shift.clock_out) {
-        // Active shift - calculate current duration
-        const clockIn = new Date(`${shift.date}T${shift.clock_in}`);
-        const now = new Date();
-        const hours = (now.getTime() - clockIn.getTime()) / (1000 * 60 * 60);
-        return sum + hours;
-      }
-      return sum;
-    }, 0);
-  };
 
   const fetchTodayAttendance = async () => {
     const today = new Date().toISOString().split("T")[0];
@@ -104,8 +89,7 @@ export default function AdminDashboardWidget() {
 }
 
 const EmployeeRow = ({ data }: { data: EmployeeAttendance }) => {
-  const { employee, todayShifts, totalHours } = data;
-  const difference = totalHours - ASSIGNED_TIME;
+  const { employee, todayShifts } = data;
 
   return (
     <Card className="p-0">
@@ -115,14 +99,7 @@ const EmployeeRow = ({ data }: { data: EmployeeAttendance }) => {
           {data.isActive ? (
             <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium ml-auto mr-1">Active</span>
           ) : (
-            <>
-              {totalHours !== 0 && difference !== 0 && (
-                <p className={`font-semibold text-right text-sm ${difference < 0 ? "text-orange-600" : "text-green-600"}`}>
-                  {difference < 0 ? "-" : "+"}
-                  {formatHours(Math.abs(difference), true)}
-                </p>
-              )}
-            </>
+            <OvertimeLabel shifts={todayShifts} />
           )}
         </div>
 

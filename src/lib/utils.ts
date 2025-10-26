@@ -1,3 +1,4 @@
+import { Attendance } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -64,4 +65,31 @@ export const getTodayDate = () => {
   const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
   const formattedDate = new Intl.DateTimeFormat("en-US", options as Intl.DateTimeFormatOptions).format(today);
   return formattedDate;
+};
+
+export const calculateTotalHours = (shifts: Attendance[]) => {
+  return shifts.reduce((sum, shift) => {
+    if (shift.hours_worked) {
+      // Completed shift
+      return sum + shift.hours_worked;
+    } else if (shift.clock_in && !shift.clock_out) {
+      // Active shift - calculate current duration
+      const clockIn = new Date(`${shift.date}T${shift.clock_in}`);
+      const now = new Date();
+      const hours = (now.getTime() - clockIn.getTime()) / (1000 * 60 * 60);
+      return sum + hours;
+    }
+    return sum;
+  }, 0);
+};
+
+export const calculateOverTime = (shifts: Attendance[]) => {
+  const totalHours = calculateTotalHours(shifts);
+  const difference = totalHours - ASSIGNED_TIME;
+  const differenceLabel = `${difference < 0 ? "-" : "+"} ${formatHours(Math.abs(difference), true)}`;
+
+  return {
+    label: differenceLabel,
+    numerical: difference,
+  };
 };

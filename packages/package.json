@@ -4,7 +4,8 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0"
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/supabase-js": "^2.76.1"
   },
   "peerDependencies": {
     "react": "^18.2.0"

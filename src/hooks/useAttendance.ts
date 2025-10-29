@@ -99,16 +99,19 @@ export function useAttendance(userId: string) {
       alert(locationCheck.error || `You are not at office location`);
       return;
     }
+
     setLoading(true);
+
     const now = new Date();
+    const today = now.toISOString().split("T")[0];
 
     const { data: existing } = await supabase
       .from("attendance")
       .select("id")
       .eq("employee_id", userId)
-      .eq("date", now)
+      .eq("date", today)
       .is("clock_out", null)
-      .single();
+      .maybeSingle();
 
     if (existing) {
       alert("You have one active shift");
@@ -118,7 +121,7 @@ export function useAttendance(userId: string) {
 
     await supabase.from("attendance").insert({
       employee_id: userId,
-      date: now.toISOString().split("T")[0],
+      date: today,
       clock_in: now.toTimeString().split(" ")[0],
       location: locationCheck.location,
     });

@@ -30,7 +30,7 @@ export default function RootLayout({
       <Head>
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system">
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>

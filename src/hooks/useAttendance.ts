@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { Attendance } from "@/types";
 import { checkLocationPermission } from "@/lib/geolocation";
+import { getLocalDate, getLocalTime } from "@/lib/utils";
 
 interface DailyAttendance {
   date: string;
@@ -20,7 +21,7 @@ export function useAttendance(userId: string) {
     const year = new Date().getFullYear();
     const firstDay = new Date(year, monthIndex, 1);
     const lastDay = new Date(year, monthIndex + 1, 0);
-
+    const today = getLocalDate(new Date());
     const startDate = firstDay.toISOString().split("T")[0];
     const endDate = lastDay.toISOString().split("T")[0];
 
@@ -30,6 +31,7 @@ export function useAttendance(userId: string) {
       .eq("employee_id", userId)
       .gte("date", startDate)
       .lte("date", endDate)
+      .is("deleted_at", null)
       .order("date", { ascending: false })
       .order("clock_in", { ascending: true });
 
@@ -43,22 +45,35 @@ export function useAttendance(userId: string) {
     });
 
     // Convert to array with totals
-    const dailyData: DailyAttendance[] = Object.entries(grouped)
-      .map(([date, shifts]) => {
-        const totalHours = shifts.reduce((sum, shift) => sum + (shift.hours_worked || 0), 0);
-        return { date, shifts, totalHours };
-      })
-      .sort((a, b) => b.date.localeCompare(a.date));
+    // const dailyData: DailyAttendance[] = Object.entries(grouped)
+    //   .map(([date, shifts]) => {
+    //     const totalHours = shifts.reduce((sum, shift) => sum + (shift.hours_worked || 0), 0);
+    //     return { date, shifts, totalHours };
+    //   })
+    //   .sort((a, b) => b.date.localeCompare(a.date));
 
-    setMonthlyAttendance(dailyData);
+    const allDates: DailyAttendance[] = [];
+    const daysInMonth = lastDay.getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, monthIndex, day);
+      const dateStr = date.toISOString().split("T")[0];
+      if (date > today) break;
+      const shifts = grouped[dateStr] || []; // Empty array if no attendance
+      const totalHours = shifts.reduce((sum, shift) => sum + (shift.hours_worked || 0), 0);
+
+      allDates.push({ date: dateStr, shifts, totalHours });
+    }
+    setMonthlyAttendance(allDates.reverse());
   };
   const fetchAttendance = async () => {
-    const today = new Date().toISOString().split("T")[0];
+    const today = getLocalDate();
     // Auto-close previous day shifts
     const { data: openShifts } = await supabase
       .from("attendance")
       .select("*")
       .eq("employee_id", userId)
+      .is("deleted_at", null)
       .is("clock_out", null)
       .lt("date", today);
 
@@ -84,6 +99,7 @@ export function useAttendance(userId: string) {
       .from("attendance")
       .select("*")
       .eq("employee_id", userId)
+      // .is("deleted_at", null)
       .eq("date", today)
       .order("clock_in", { ascending: false });
 
@@ -103,7 +119,7 @@ export function useAttendance(userId: string) {
     setLoading(true);
 
     const now = new Date();
-    const today = now.toISOString().split("T")[0];
+    const today = getLocalDate(now);
 
     const { data: existing } = await supabase
       .from("attendance")
@@ -122,7 +138,7 @@ export function useAttendance(userId: string) {
     await supabase.from("attendance").insert({
       employee_id: userId,
       date: today,
-      clock_in: now.toTimeString().split(" ")[0],
+      clock_in: getLocalTime(now),
       location: locationCheck.location,
     });
     await fetchAttendance();
@@ -133,7 +149,7 @@ export function useAttendance(userId: string) {
     if (!activeSession) return;
     setLoading(true);
     const now = new Date();
-    const time = now.toTimeString().split(" ")[0];
+    const time = getLocalTime(now);
     const clockIn = new Date(`1970-01-01T${activeSession.clock_in}`);
     const clockOut = new Date(`1970-01-01T${time}`);
     const hours = (clockOut.getTime() - clockIn.getTime()) / (1000 * 60 * 60);

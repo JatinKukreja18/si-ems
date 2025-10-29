@@ -1,8 +1,9 @@
 import { Attendance } from "@/types";
-import { Button } from "../../../components/ui/button";
-import { Card } from "../../../components/ui/card";
+
 import ShiftTimer from "./ShiftTimer";
 import { getTodayDate } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface ClockInOutCardProps {
   activeSession: Attendance | null;

@@ -7,10 +7,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Attendance } from "@/types";
 import { useEmployees } from "@/hooks/useEmployees";
-import { calculateTotalHours, getTodayDate } from "@/lib/utils";
-import ShiftTimeRow from "./ShiftTimeRow";
+import { calculateTotalHours, getLocalDate, getTodayDate } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
-import OvertimeLabel from "./OvertimeLabel";
+import { EmployeeAttendanceCard } from "./EmployeeAttendanceCard";
 
 interface Employee {
   id: string;
@@ -28,7 +27,7 @@ interface EmployeeAttendance {
 export default function AdminDashboardWidget() {
   const [employeesData, setEmployeesData] = useState<EmployeeAttendance[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedLocation, setSelectedLocation] = useState<"ALL" | "SPM" | "JC">("SPM");
+  const [selectedLocation, setSelectedLocation] = useState<"ALL" | "SPM" | "JC">("ALL");
 
   const { employeesData: employees } = useEmployees();
 
@@ -42,16 +41,15 @@ export default function AdminDashboardWidget() {
   }, [employees]);
 
   const fetchTodayAttendance = async () => {
-    const today = new Date().toISOString().split("T")[0];
+    const today = getLocalDate();
 
     if (!employees) return;
 
+    setLoading(true);
     const { data: attendance } = await supabase.from("attendance").select("*").eq("date", today).order("clock_in", { ascending: false });
 
     const employeesWithAttendance: EmployeeAttendance[] = employees.map((emp) => {
       const shifts = attendance?.filter((a) => a.employee_id === emp.id) || [];
-      console.log(shifts);
-
       const totalHours = calculateTotalHours(shifts);
       const isActive = shifts.some((s) => s.clock_in && !s.clock_out);
 
@@ -71,7 +69,10 @@ export default function AdminDashboardWidget() {
 
   return (
     <>
-      <div className="flex gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-6">
+        <Button className="w-full" variant={selectedLocation === "ALL" ? "default" : "outline"} onClick={() => setSelectedLocation("ALL")}>
+          All
+        </Button>
         <Button variant={selectedLocation === "SPM" ? "default" : "outline"} onClick={() => setSelectedLocation("SPM")} className="flex-1">
           South Point Mall
         </Button>
@@ -91,7 +92,7 @@ export default function AdminDashboardWidget() {
 
         <div className="space-y-3">
           {filteredEmployees.map((empData) => (
-            <EmployeeRow data={empData} key={empData.employee.id} />
+            <EmployeeAttendanceCard data={empData} key={empData.employee.id} />
           ))}
 
           {filteredEmployees.length === 0 && <p className="text-center text-muted-foreground py-8">No employees found</p>}
@@ -105,27 +106,3 @@ export default function AdminDashboardWidget() {
     </>
   );
 }
-
-const EmployeeRow = ({ data }: { data: EmployeeAttendance }) => {
-  const { employee, todayShifts } = data;
-
-  return (
-    <Card className="p-2">
-      <Link href={"/dashboard/attendance?user=" + employee.id} key={employee.id} className="flex flex-col gap-1 rounded-lg">
-        <div className="px-2 pb-2 flex justify-between">
-          <p className="font-semibold capitalize">{employee.name.toLowerCase()}</p>
-          {data.isActive && (
-            <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium ml-auto mr-1">Active</span>
-          )}
-          {!data.isActive && todayShifts.length > 0 && <OvertimeLabel shifts={todayShifts} />}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          {todayShifts.map((shift) => {
-            return <ShiftTimeRow record={shift} key={shift.id} hideLocation />;
-          })}
-        </div>
-      </Link>
-    </Card>
-  );
-};

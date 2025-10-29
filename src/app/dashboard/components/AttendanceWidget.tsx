@@ -2,10 +2,10 @@
 
 import { Card } from "@/components/ui/card";
 import { useAttendance } from "@/hooks/useAttendance";
-import ClockInOutCard from "./ClockInOutCard";
 import { useAuth } from "@/contexts/AuthContext";
-import ShiftTimeRow from "./ShiftTimeRow";
 import { formatDuration } from "@/lib/utils";
+import ClockInOutCard from "./ClockInOutCard";
+import ShiftTimeRow from "./ShiftTimeRow";
 
 export default function AttendanceWidget({ hideTodayShifts = false }: { hideTodayShifts?: boolean }) {
   const { user } = useAuth();

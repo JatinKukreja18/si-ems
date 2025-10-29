@@ -5,11 +5,13 @@ import { useAttendance } from "@/hooks/useAttendance";
 import { MONTHS } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import ShiftTimeRow from "../../components/ShiftTimeRow";
 import OvertimeLabel from "../../components/OvertimeLabel";
+import ShiftTimeRow from "../../components/ShiftTimeRow";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function AttendanceHistory({ userId }: { userId: string }) {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const { isAdmin } = useAuth();
   const { currentMonth, monthlyAttendance, fetchMonthlyAttendance } = useAttendance(userId ?? "");
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
 
   return (
     <>
-      <Card className="p-4 sticky top-2">
+      <Card className="p-3 sticky top-2">
         <div className="flex justify-between">
           <h2 className="text-xl font-semibold">Attendance History</h2>
           <div className="flex gap-2 items-center">
@@ -46,7 +48,7 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
           </div>
         </div>
       </Card>
-      <Card className="p-4">
+      <Card className="p-3">
         <div className="space-y-2">
           {monthlyAttendance.map(({ date, shifts }) => {
             return (
@@ -55,11 +57,16 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
                   <h4 className="font-medium text-gray-700 w-full">
                     {new Date(date).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}
                   </h4>
-                  <OvertimeLabel shifts={shifts} />
+                  {shifts.length > 0 && <OvertimeLabel shifts={shifts} />}
                 </div>
                 <div className="w-full flex flex-col   gap-2">
                   {shifts?.map((shift) => (
-                    <ShiftTimeRow record={shift} key={shift.id} />
+                    <ShiftTimeRow
+                      record={shift}
+                      key={shift.id}
+                      isAdmin={isAdmin}
+                      onShiftAction={() => fetchMonthlyAttendance(selectedMonth)}
+                    />
                   ))}
                 </div>
               </div>

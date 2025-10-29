@@ -9,11 +9,12 @@ interface ClockInOutCardProps {
   loading: boolean;
   onStartShift: () => void;
   onEndShift: () => void;
+  canMarkAbsent: boolean;
 }
 
-export default function ClockInOutCard({ activeSession, loading, onStartShift, onEndShift }: ClockInOutCardProps) {
+export default function ClockInOutCard({ activeSession, loading, onStartShift, onEndShift, canMarkAbsent }: ClockInOutCardProps) {
   const canStartShift = !activeSession;
-  const canEndShift = !!activeSession;
+  const canEndShift = activeSession?.clock_in && activeSession.clock_out === null;
   const isClocking = !!activeSession;
 
   return (
@@ -34,6 +35,11 @@ export default function ClockInOutCard({ activeSession, loading, onStartShift, o
         <Button size={"lg"} variant={"destructive"} className="md:flex-none flex-1" onClick={onEndShift} disabled={loading || !canEndShift}>
           End Shift
         </Button>
+        {canMarkAbsent && (
+          <Button size={"lg"} className="md:flex-none flex-1" onClick={onEndShift} disabled={loading || canMarkAbsent}>
+            Mark Absent
+          </Button>
+        )}
       </div>
     </Card>
   );

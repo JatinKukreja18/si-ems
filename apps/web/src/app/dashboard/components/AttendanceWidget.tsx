@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { useAttendance } from "@/hooks/useAttendance";
+import { useAttendance } from "@si-ems/shared";
 import ClockInOutCard from "./ClockInOutCard";
 import { useAuth } from "@/contexts/AuthContext";
 import ShiftTimeRow from "./ShiftTimeRow";
@@ -16,7 +16,13 @@ export default function AttendanceWidget({ hideTodayShifts = false }: { hideToda
   const todayTotalHours = todayAttendance.reduce((sum, record) => sum + (record.hours_worked || 0), 0);
   return (
     <div className="space-y-4 ">
-      <ClockInOutCard activeSession={activeSession} loading={loading} onStartShift={startShift} onEndShift={endShift} />
+      <ClockInOutCard
+        canMarkAbsent={todayTotalHours === 0}
+        activeSession={activeSession}
+        loading={loading}
+        onStartShift={startShift}
+        onEndShift={endShift}
+      />
 
       {!hideTodayShifts && todayAttendance.length > 0 && (
         <Card className="p-4 gap-4">

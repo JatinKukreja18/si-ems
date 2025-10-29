@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/kukreja/Projects/si-ema/apps/web/src/app/page.tsx"],"sourcesContent":["\"use client\";\n\nimport { useEffect } from \"react\";\nimport { useRouter } from \"next/navigation\";\nimport { useAuth } from \"@/contexts/AuthContext\";\n\nexport default function Home() {\n  const { user, loading } = useAuth();\n  const router = useRouter();\n\n  useEffect(() => {\n    if (!loading) {\n      if (user) {\n        router.replace(\"/dashboard\");\n      } else {\n        router.replace(\"/login\");\n      }\n    }\n  }, [user, loading, router]);\n\n  return <div className=\"flex items-center justify-center h-screen\">Loading...</div>;\n}\n"],"names":[],"mappings":";;;;;AAEA;AACA;AACA;;;AAJA;;;;AAMe,SAAS;;IACtB,MAAM,EAAE,IAAI,EAAE,OAAO,EAAE,GAAG,IAAA,qLAAO;IACjC,MAAM,SAAS,IAAA,2KAAS;IAExB,IAAA,mMAAS;0BAAC;YACR,IAAI,CAAC,SAAS;gBACZ,IAAI,MAAM;oBACR,OAAO,OAAO,CAAC;gBACjB,OAAO;oBACL,OAAO,OAAO,CAAC;gBACjB;YACF;QACF;yBAAG;QAAC;QAAM;QAAS;KAAO;IAE1B,qBAAO,sNAAC;QAAI,WAAU;kBAA4C;;;;;;AACpE;GAfwB;;QACI,qLAAO;QAClB,2KAAS;;;KAFF","debugId":null}}]
-}

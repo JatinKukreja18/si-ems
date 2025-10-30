@@ -10,6 +10,7 @@ import { useEmployees } from "@/hooks/useEmployees";
 import { calculateTotalHours, getDateISO, getTodayDate } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import { EmployeeAttendanceCard } from "./EmployeeAttendanceCard";
+import { useAdminAttendance } from "@/hooks/useAdminAttendance";
 
 interface Employee {
   id: string;
@@ -25,8 +26,8 @@ interface EmployeeAttendance {
 }
 
 export default function AdminDashboardWidget() {
-  const [employeesData, setEmployeesData] = useState<EmployeeAttendance[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { employeesData, loading } = useAdminAttendance();
+
   const [selectedLocation, setSelectedLocation] = useState<"ALL" | "SPM" | "JC">("ALL");
 
   const { employeesData: employees } = useEmployees();
@@ -35,35 +36,6 @@ export default function AdminDashboardWidget() {
     if (selectedLocation === "ALL") return true;
     return empData.todayShifts.some((shift) => shift.location === selectedLocation);
   });
-
-  useEffect(() => {
-    fetchTodayAttendance();
-  }, [employees]);
-
-  const fetchTodayAttendance = async () => {
-    const today = getDateISO();
-
-    if (!employees) return;
-
-    setLoading(true);
-    const { data: attendance } = await supabase.from("attendance").select("*").eq("date", today).order("clock_in", { ascending: false });
-
-    const employeesWithAttendance: EmployeeAttendance[] = employees.map((emp) => {
-      const shifts = attendance?.filter((a) => a.employee_id === emp.id) || [];
-      const totalHours = calculateTotalHours(shifts);
-      const isActive = shifts.some((s) => s.clock_in && !s.clock_out);
-
-      return {
-        employee: emp,
-        todayShifts: shifts,
-        totalHours,
-        isActive,
-      };
-    });
-
-    setEmployeesData(employeesWithAttendance);
-    setLoading(false);
-  };
 
   if (loading) return <Card className="p-6">Loading...</Card>;
 

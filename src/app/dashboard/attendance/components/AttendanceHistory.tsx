@@ -2,12 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useAttendance } from "@/hooks/useAttendance";
-import { MONTHS } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
+
+import { useAuth } from "@/contexts/AuthContext";
+import { MONTHS_SHORT } from "@/lib/constants";
 import OvertimeLabel from "../../components/OvertimeLabel";
 import ShiftTimeRow from "../../components/ShiftTimeRow";
-import { useAuth } from "@/contexts/AuthContext";
 
 export default function AttendanceHistory({ userId }: { userId: string }) {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
@@ -36,12 +37,12 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
     <>
       <Card className="p-3 sticky top-2">
         <div className="flex justify-between">
-          <h2 className="text-xl font-semibold">Attendance History</h2>
+          <h2 className="text-lg font-semibold">Attendance History</h2>
           <div className="flex gap-2 items-center">
             <Button disabled={selectedMonth === 1} onClick={() => onPreviousClick()}>
               <ChevronLeft />
             </Button>
-            <span className="text-md ">{MONTHS[selectedMonth + 1]}</span>
+            <span className="text-md ">{MONTHS_SHORT[selectedMonth]}</span>
             <Button disabled={selectedMonth === currentMonth} onClick={() => setSelectedMonth(selectedMonth + 1)}>
               <ChevronRight />
             </Button>
@@ -51,13 +52,15 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
       <Card className="p-3">
         <div className="space-y-2">
           {monthlyAttendance.map(({ date, shifts }) => {
+            const isActive = shifts.some((s) => s.clock_in && !s.clock_out);
+
             return (
               <div key={date} className="flex flex-wrap items-center justify-between mb-4 gap-2">
                 <div className="flex justify-between items-center w-full">
                   <h4 className="font-medium text-gray-700 w-full">
                     {new Date(date).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}
                   </h4>
-                  {shifts.length > 0 && <OvertimeLabel shifts={shifts} />}
+                  {shifts.length > 0 && !isActive && <OvertimeLabel shifts={shifts} />}
                 </div>
                 <div className="w-full flex flex-col   gap-2">
                   {shifts?.map((shift) => (

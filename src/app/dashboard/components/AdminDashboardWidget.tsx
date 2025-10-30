@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Attendance } from "@/types";
 import { useEmployees } from "@/hooks/useEmployees";
-import { calculateTotalHours, getLocalDate, getTodayDate } from "@/lib/utils";
+import { calculateTotalHours, getDateISO, getTodayDate } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import { EmployeeAttendanceCard } from "./EmployeeAttendanceCard";
 
@@ -41,7 +41,7 @@ export default function AdminDashboardWidget() {
   }, [employees]);
 
   const fetchTodayAttendance = async () => {
-    const today = getLocalDate();
+    const today = getDateISO();
 
     if (!employees) return;
 

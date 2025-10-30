@@ -1,31 +1,15 @@
 import { Attendance } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { CONSTANTS } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const ASSIGNED_TIME = 10;
-
 export const LOCATION_LABEL: Record<string, string> = {
   JC: "AIPL Joy Central",
   SPM: "South Point Mall",
-};
-
-export const MONTHS: Record<string, string> = {
-  1: "Jan",
-  2: "Feb",
-  3: "Mar",
-  4: "Apr",
-  5: "May",
-  6: "Jun",
-  7: "Jul",
-  8: "Aug",
-  9: "Sep",
-  10: "Oct",
-  11: "Nov",
-  12: "Dec",
 };
 
 export const formatTime = (time: string | null) => {
@@ -76,7 +60,7 @@ export const calculateTotalHours = (shifts: Attendance[]) => {
       // Active shift - calculate current duration
       const clockIn = new Date(`${shift.date}T${shift.clock_in}`);
       const now = new Date();
-      const hours = (now.getTime() - clockIn.getTime()) / (1000 * 60 * 60);
+      const hours = (now.getTime() - clockIn.getTime()) / CONSTANTS.MS_PER_HOUR;
       return sum + hours;
     }
     return sum;
@@ -85,7 +69,7 @@ export const calculateTotalHours = (shifts: Attendance[]) => {
 
 export const calculateOverTime = (shifts: Attendance[]) => {
   const totalHours = calculateTotalHours(shifts);
-  const difference = totalHours - ASSIGNED_TIME;
+  const difference = totalHours - CONSTANTS.ASSIGNED_HOURS;
   const differenceLabel = `${difference < 0 ? "-" : "+"} ${formatHours(Math.abs(difference), true)}`;
 
   return {
@@ -94,11 +78,18 @@ export const calculateOverTime = (shifts: Attendance[]) => {
   };
 };
 
-export function getLocalDate(date: Date = new Date()): string {
+export function getDateISO(date: Date = new Date()): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+export function getDateDisplay(date: Date = new Date()): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${day}-${month}-${year}`; // DD-MM-YYYY for display
 }
 
 export function getLocalTime(date: Date = new Date()): string {

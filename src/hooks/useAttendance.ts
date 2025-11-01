@@ -113,6 +113,7 @@ export function useAttendance(userId: string) {
   };
 
   const startShift = async () => {
+    if (loading) return;
     try {
       const locationCheck = await checkLocationPermission();
 

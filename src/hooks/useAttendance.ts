@@ -54,8 +54,6 @@ export function useAttendance(userId: string) {
   };
 
   const generateAllDatesInMonth = (year: number, monthIndex: number, grouped: Record<string, Attendance[]>): DailyAttendance[] => {
-    console.log(monthIndex);
-
     const lastDay = new Date(year, monthIndex + 1, 0);
     const todayDateObj = new Date();
     const allDates: DailyAttendance[] = [];
@@ -63,14 +61,12 @@ export function useAttendance(userId: string) {
     for (let day = 1; day <= lastDay.getDate(); day++) {
       const date = new Date(year, monthIndex, day);
 
-      const dateStr = date.toISOString().split("T")[0];
+      const dateStr = getDateISO(date);
       const shifts = grouped[dateStr] || [];
       const totalHours = shifts.reduce((sum, shift) => sum + (shift.hours_worked || 0), 0);
 
-      allDates.push({ date: dateStr, shifts, totalHours });
-
-      // only break after today's date
       if (date >= todayDateObj) break;
+      allDates.push({ date: dateStr, shifts, totalHours });
     }
 
     return allDates.reverse();
@@ -85,8 +81,8 @@ export function useAttendance(userId: string) {
       .from("attendance")
       .select("*")
       .eq("employee_id", userId)
-      .gte("date", firstDay.toISOString().split("T")[0])
-      .lte("date", lastDay.toISOString().split("T")[0])
+      .gte("date", getDateISO(firstDay))
+      .lte("date", getDateISO(lastDay))
       .is("deleted_at", null)
       .order("date", { ascending: false })
       .order("clock_in", { ascending: true });

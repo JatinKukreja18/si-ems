@@ -37,13 +37,13 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
     <>
       <Card className="p-3 sticky top-2">
         <div className="flex justify-between">
-          <h2 className="text-lg font-semibold">Attendance History</h2>
+          <h2 className="text-lg font-semibold">Monthly History</h2>
           <div className="flex gap-2 items-center">
             <Button disabled={selectedMonth === 1} onClick={() => onPreviousClick()}>
               <ChevronLeft />
             </Button>
             <span className="text-md ">{MONTHS_SHORT[selectedMonth]}</span>
-            <Button disabled={selectedMonth === currentMonth} onClick={() => setSelectedMonth(selectedMonth + 1)}>
+            <Button disabled={selectedMonth === currentMonth} onClick={() => onNextClick()}>
               <ChevronRight />
             </Button>
           </div>

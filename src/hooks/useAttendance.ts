@@ -60,7 +60,6 @@ export function useAttendance(userId: string) {
 
     for (let day = 1; day <= lastDay.getDate(); day++) {
       const date = new Date(year, monthIndex, day);
-
       const dateStr = getDateISO(date);
       const shifts = grouped[dateStr] || [];
       const totalHours = shifts.reduce((sum, shift) => sum + (shift.hours_worked || 0), 0);
@@ -157,18 +156,19 @@ export function useAttendance(userId: string) {
     }
   };
 
-  const endShift = async () => {
+  const endShift = async (remoteReason?: string) => {
+    console.log(remoteReason);
+
     if (!activeSession) return;
 
     try {
       setLoading(true);
 
-      // Check location before allowing clock out
       const locationCheck = await checkLocationPermission();
-      if (!locationCheck.allowed) {
-        alert(`You must be at office location to clock out. Current distance: ${locationCheck.distance}m`);
+
+      if (!locationCheck.allowed && !remoteReason) {
         setLoading(false);
-        return;
+        throw new Error("LOCATION_REQUIRED");
       }
 
       const now = new Date();
@@ -179,20 +179,26 @@ export function useAttendance(userId: string) {
       const clockOut = new Date(`1970-01-01T${time}`);
       const hours = (clockOut.getTime() - clockIn.getTime()) / (1000 * 60 * 60);
 
-      const { error } = await supabase
-        .from("attendance")
-        .update({
-          clock_out: time,
-          hours_worked: hours,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", activeSession.id);
+      const updateData: any = {
+        clock_out: time,
+        hours_worked: hours,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (remoteReason) {
+        updateData.remote_clockout_reason = remoteReason;
+      }
+
+      const { error } = await supabase.from("attendance").update(updateData).eq("id", activeSession.id);
 
       if (error) throw error;
 
       await fetchAttendance();
     } catch (error: any) {
       console.error("End shift error:", error);
+      if (error.message === "LOCATION_REQUIRED") {
+        throw error;
+      }
       alert(error.message || "Failed to end shift");
     } finally {
       setLoading(false);

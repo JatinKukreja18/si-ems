@@ -1,16 +1,9 @@
+import { JC, SPM } from "./constants";
+
 export interface Coordinates {
   latitude: number;
   longitude: number;
 }
-
-const SPM = {
-  latitude: 28.448002743026226,
-  longitude: 77.09921455975022,
-};
-const JC = {
-  latitude: 28.405074663351474,
-  longitude: 77.06046136788333,
-};
 
 const OFFICE_LOCATIONS: Coordinates[] = [SPM, JC];
 

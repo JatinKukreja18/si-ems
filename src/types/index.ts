@@ -28,3 +28,16 @@ export interface EmployeeAttendance {
   totalHours: number;
   isActive: boolean;
 }
+
+export const LOCATIONS = {
+  SPM: "SPM",
+  JC: "JC",
+} as const;
+
+export const LOCATION_FILTERS = {
+  ALL: "ALL",
+  ...LOCATIONS,
+} as const;
+
+export type Location = (typeof LOCATIONS)[keyof typeof LOCATIONS];
+export type LocationFilter = (typeof LOCATION_FILTERS)[keyof typeof LOCATION_FILTERS];

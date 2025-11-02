@@ -1,12 +1,13 @@
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEmployees } from "@/hooks/useEmployees";
+import { ROUTES } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 
 export default function EmployeeSelector({ selectedUser }: { selectedUser: string | null | undefined }) {
   const { employeesData } = useEmployees();
   const router = useRouter();
   function onEmployeeChange(empId: string) {
-    router.replace("/dashboard/attendance?user=" + empId);
+    router.replace(ROUTES.ATTENDANCE + "?user=" + empId);
   }
   return (
     <Select defaultValue={selectedUser || ""} onValueChange={onEmployeeChange}>

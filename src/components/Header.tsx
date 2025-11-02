@@ -15,7 +15,7 @@ export default function Header() {
     router.push("/login");
   };
   return (
-    <div className="px-4 py-2 border-b-1 border-gray-500 bg-foreground">
+    <div className="px-4 py-2 border-b border-gray-500 bg-foreground">
       <div className="container flex items-center justify-between m-auto">
         <Link href={"/"} className="text-md md:text-xl font-bold uppercase text-background flex gap-2 items-center">
           <Image src="/favicon.svg" alt="Header Logo" width={30} height={30} /> EMS

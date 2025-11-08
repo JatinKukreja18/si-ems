@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { Loader } from "@/components/Loader";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -18,5 +19,9 @@ export default function Home() {
     }
   }, [user, loading, router]);
 
-  return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <Loader />
+    </div>
+  );
 }

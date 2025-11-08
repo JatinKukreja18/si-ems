@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import AttendanceWidget from "../../components/widgets/AttendanceWidget";
+import AttendanceWidget from "../../../components/widgets/AttendanceWidget";
 import { useSearchParams } from "next/navigation";
 import EmployeeSelector from "./components/EmployeeSelector";
 import AttendanceHistory from "./components/AttendanceHistory";

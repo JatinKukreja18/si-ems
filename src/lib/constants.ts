@@ -32,5 +32,8 @@ export const JC = {
 
 export const ROUTES = {
   DASHBOARD: "/dashboard",
-  ATTENDANCE: "/attendance",
+  ATTENDANCE: "/dashboard/attendance",
+  APPROVALS: "/dashboard/attendance/approvals",
+  PAYROLL: "/dashoboard/payroll",
+  LEAVES: "/dashoboard/leaves",
 };

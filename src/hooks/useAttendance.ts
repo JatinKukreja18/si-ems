@@ -40,6 +40,8 @@ export function useAttendance(userId: string) {
         .update({
           clock_out: "23:59:59",
           hours_worked: hours,
+          status: "pending_approval",
+          approval_required_reason: "Auto-closed: Forgot to clock out",
           updated_at: new Date().toISOString(),
         })
         .eq("id", shift.id);
@@ -157,8 +159,6 @@ export function useAttendance(userId: string) {
   };
 
   const endShift = async (remoteReason?: string) => {
-    console.log(remoteReason);
-
     if (!activeSession) return;
 
     try {
@@ -187,6 +187,8 @@ export function useAttendance(userId: string) {
 
       if (remoteReason) {
         updateData.remote_clockout_reason = remoteReason;
+        updateData.status = "pending_approval";
+        updateData.approval_required_reason = `Remote clock-out: ${remoteReason}`;
       }
 
       const { error } = await supabase.from("attendance").update(updateData).eq("id", activeSession.id);

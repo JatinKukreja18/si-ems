@@ -120,3 +120,51 @@
     @apply bg-background text-foreground;
   }
 }
+
+.loader_svg #letter_1,
+.loader_svg #letter_2 {
+  fill: black;
+}
+
+.loader_svg #letter_3,
+.loader_svg #letter_4 {
+  fill: #f4e9d9;
+}
+
+.loader_svg #letter_1 {
+  animation: fadein 700ms infinite alternate;
+}
+.loader_svg #letter_2 {
+  animation: fadein 700ms 100ms infinite alternate;
+}
+.loader_svg #letter_3 {
+  animation: fadein 700ms 200ms infinite alternate;
+}
+.loader_svg #letter_4 {
+  animation: fadein 700ms 300ms infinite alternate;
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100%;
+  }
+}
+
+.loader_svg .base {
+  transform-origin: center;
+  animation: rotate 0.7s infinite alternate;
+}
+
+@keyframes rotate {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0.94);
+  }
+}

@@ -2,7 +2,7 @@
 
 import { formatDuration, formatTime, LOCATION_LABEL } from "@/lib/utils";
 import { Attendance } from "@/types";
-import { ShiftActionsMenu, ShiftActionsMenuMobile } from "../../attendance/components/ShiftAction";
+import { ShiftActionsMenu, ShiftActionsMenuMobile } from "../attendance/components/ShiftAction";
 import { useState } from "react";
 
 export default function ShiftTimeRow({

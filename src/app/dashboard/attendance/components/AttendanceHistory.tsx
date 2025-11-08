@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { MONTHS_SHORT } from "@/lib/constants";
-import OvertimeLabel from "../../dashboard/components/OvertimeLabel";
-import ShiftTimeRow from "../../dashboard/components/ShiftTimeRow";
+import OvertimeLabel from "../../components/OvertimeLabel";
+import ShiftTimeRow from "../../components/ShiftTimeRow";
 
 export default function AttendanceHistory({ userId }: { userId: string }) {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());

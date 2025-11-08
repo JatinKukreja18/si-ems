@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { useAttendance } from "@/hooks/useAttendance";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-
 import { useAuth } from "@/contexts/AuthContext";
 import { MONTHS_SHORT } from "@/lib/constants";
 import ShiftTimeRow from "@/components/ShiftTimeRow";

@@ -33,7 +33,7 @@ export default function ShiftTimeRow({
         <span className={`font-semibold text-sm`}>{formatDuration(record.hours_worked)}</span>
       </div>
       {isAdmin && (
-        <div>
+        <div className="w-full sm:w-auto">
           <div className="hidden sm:flex sm:invisible sm:group-hover:visible ">
             <ShiftActionsMenu shift={record} onCompletedAction={onCompletedAction} />
           </div>

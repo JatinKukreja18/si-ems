@@ -1,7 +1,6 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEmployees } from "@/hooks/useEmployees";
 import { ROUTES } from "@/lib/constants";
-import { Employee } from "@/types";
 import { useRouter } from "next/navigation";
 
 export default function EmployeeSelector({ selectedUser }: { selectedUser: string | null | undefined }) {

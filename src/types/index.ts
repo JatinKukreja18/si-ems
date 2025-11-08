@@ -6,6 +6,7 @@ export interface User {
   role: "admin" | "employee";
   base_salary: number;
   created_at: string;
+  emp_id: string;
 }
 
 export interface Attendance {
@@ -20,7 +21,7 @@ export interface Attendance {
   updated_at: string;
 }
 
-export type Employee = Pick<User, "id" | "name" | "email">;
+export type Employee = Pick<User, "id" | "name" | "email" | "emp_id">;
 
 export interface EmployeeAttendance {
   employee: Employee;

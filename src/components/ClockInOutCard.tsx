@@ -1,6 +1,6 @@
 import { Attendance } from "@/types";
 
-import ShiftTimer from "../app/dashboard/components/ShiftTimer";
+import ShiftTimer from "@/components/ShiftTimer";
 import { getTodayDate } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

@@ -209,7 +209,7 @@ export function ShiftActionsMenuMobile({ shift, onCompletedAction }: { shift: At
           <Edit size={14} className="mr-1" /> Edit Shift
         </Button>
         <Button variant="destructive" size={"sm"} className="flex-1" onClick={() => setDeleteOpen(true)}>
-          <Trash2 size={14} className="mr-1" /> Delete Shift
+          <Trash2 size={14} className="mr-1 text-inherit" /> Delete Shift
         </Button>
       </ButtonGroup>
       <EditShiftDialog open={editOpen} setOpen={setEditOpen} shift={shift} onSuccess={onCompletedAction} />

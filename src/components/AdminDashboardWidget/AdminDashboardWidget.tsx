@@ -37,7 +37,7 @@ export default function AdminDashboardWidget() {
           </Link>
         </div>
 
-        <div className="space-y-3">
+        <div className="gap-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {filteredEmployees.map((empData) => (
             <EmployeeAttendanceCard data={empData} key={empData.employee.id} />
           ))}

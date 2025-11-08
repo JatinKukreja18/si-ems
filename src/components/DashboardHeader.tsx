@@ -3,7 +3,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { checkLocationPermission } from "@/lib/geolocation";
 import { LOCATION_LABEL } from "@/lib/utils";
-import { User } from "@/types";
 import React, { useEffect, useState } from "react";
 
 export default function DashboardHeader() {

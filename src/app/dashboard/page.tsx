@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import AttendanceWidget from "@/components/widgets/AttendanceWidget";
-import AdminDashboardWidget from "./components/AdminDashboardWidget/AdminDashboardWidget";
-import DashboardHeader from "./components/DashboardHeader";
+import AdminDashboardWidget from "@/components/AdminDashboardWidget/AdminDashboardWidget";
+import DashboardHeader from "@/components/DashboardHeader";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Calendar1, CalendarPlus, ReceiptIndianRupee } from "lucide-react";

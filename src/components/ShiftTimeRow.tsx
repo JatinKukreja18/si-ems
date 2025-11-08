@@ -1,8 +1,8 @@
 "use client";
 
+import { ShiftActionsMenu, ShiftActionsMenuMobile } from "@/app/dashboard/[empid]/attendance/components/ShiftAction";
 import { formatDuration, formatTime, LOCATION_LABEL } from "@/lib/utils";
 import { Attendance } from "@/types";
-import { ShiftActionsMenu, ShiftActionsMenuMobile } from "../attendance/components/ShiftAction";
 import { useState } from "react";
 
 export default function ShiftTimeRow({
@@ -33,7 +33,7 @@ export default function ShiftTimeRow({
         <span className={`font-semibold text-sm`}>{formatDuration(record.hours_worked)}</span>
       </div>
       {isAdmin && (
-        <div className="w-full">
+        <div>
           <div className="hidden sm:flex sm:invisible sm:group-hover:visible ">
             <ShiftActionsMenu shift={record} onCompletedAction={onCompletedAction} />
           </div>

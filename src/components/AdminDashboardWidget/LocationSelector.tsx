@@ -8,9 +8,9 @@ interface LocationSelectorProps {
 }
 export const LocationSelector = ({ selectedLocation, onLocationChange }: LocationSelectorProps) => {
   return (
-    <div className="flex flex-wrap gap-2 mb-6">
+    <div className="flex flex-wrap sm:flex-nowrap gap-2 mb-6">
       <Button
-        className="w-full"
+        className="w-full flex- sm:w-auto"
         variant={selectedLocation === LOCATION_FILTERS.ALL ? "default" : "outline"}
         onClick={() => onLocationChange(LOCATION_FILTERS.ALL)}
       >
@@ -19,14 +19,14 @@ export const LocationSelector = ({ selectedLocation, onLocationChange }: Locatio
       <Button
         variant={selectedLocation === LOCATION_FILTERS.SPM ? "default" : "outline"}
         onClick={() => onLocationChange(LOCATION_FILTERS.SPM)}
-        className="flex-1"
+        className="flex-1 sm:flex-none"
       >
         South Point Mall
       </Button>
       <Button
         variant={selectedLocation === LOCATION_FILTERS.JC ? "default" : "outline"}
         onClick={() => onLocationChange(LOCATION_FILTERS.JC)}
-        className="flex-1"
+        className="flex-1 sm:flex-none"
       >
         AIPL Joy Central
       </Button>

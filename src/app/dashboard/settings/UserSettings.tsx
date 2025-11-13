@@ -1,8 +1,12 @@
-import { ItemContent, ItemTitle, ItemDescription, Item } from "@/components/ui/item";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ItemContent, ItemTitle, ItemDescription, Item, ItemActions } from "@/components/ui/item";
 import { useEmployee } from "@/hooks/useEmployee";
 
 export default function UserSettings({ userId }: { userId: string }) {
   const { employeeData } = useEmployee(userId);
+  const [editableField, setEditableField] = useState<string | null>(null);
 
   if (!employeeData) return;
 
@@ -24,9 +28,31 @@ export default function UserSettings({ userId }: { userId: string }) {
         <Item variant="muted">
           <ItemContent>
             <ItemTitle>Mobile</ItemTitle>
-            <ItemDescription>{employeeData.mobile}</ItemDescription>
+            {editableField === "mobile" ? (
+              <Input size={10} defaultValue={employeeData.mobile} className="text-sm" autoFocus placeholder="mobile" required />
+            ) : (
+              <ItemDescription>{employeeData.mobile}</ItemDescription>
+            )}
           </ItemContent>
+          <ItemActions>
+            {editableField !== "mobile" && (
+              <Button size="sm" onClick={() => setEditableField("mobile")}>
+                Edit
+              </Button>
+            )}
+          </ItemActions>
+          {editableField === "mobile" && (
+            <div className="flex items-center gap-1 w-full -mt-2">
+              <Button size="sm" onClick={() => setEditableField("mobile")}>
+                Save
+              </Button>
+              <Button size="sm" variant={"link"} onClick={() => setEditableField(null)}>
+                Cancel
+              </Button>
+            </div>
+          )}
         </Item>
+
         <Item variant="muted">
           <ItemContent>
             <ItemTitle>Assigned Hours</ItemTitle>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ShiftActionsMenu, ShiftActionsMenuMobile } from "@/app/dashboard/[empid]/attendance/components/ShiftAction";
+import { ShiftActionsMenu, ShiftActionsMenuMobile } from "@/app/dashboard/attendance/components/ShiftAction";
 import { formatDuration, formatTime, LOCATION_LABEL } from "@/lib/utils";
 import { Attendance } from "@/types";
 import { useState } from "react";

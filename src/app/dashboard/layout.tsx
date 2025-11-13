@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import FixedNavigation from "@/components/core/FixedNavigation";
+import { Loader } from "@/components/Loader";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     checkAuth();
   }, [router]);
 
-  if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex items-center flex-col justify-center h-screen ">
+        <Loader />
+      </div>
+    );
 
   return (
     <>

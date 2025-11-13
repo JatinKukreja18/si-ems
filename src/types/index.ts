@@ -7,6 +7,8 @@ export interface User {
   base_salary: number;
   created_at: string;
   emp_id: string;
+  assigned_hours: string | null;
+  joining_date: string | null;
 }
 
 export interface Attendance {

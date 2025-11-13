@@ -23,7 +23,7 @@ export default function ShiftTimeRow({
     setOpen(false);
     onShiftAction?.();
   }
-  const { id, clock_in, clock_out, status, remote_clockout_reason, location } = record;
+  const { id, clock_in, clock_out, status, remote_clockout_reason, location, hours_worked } = record;
 
   return (
     <div className="flex flex-wrap justify-between bg-muted rounded-lg group">

@@ -29,7 +29,7 @@ export default function AttendanceWidget({ hideTodayShifts = false }: { hideToda
 
           <div className="pt-4 border-t flex justify-between items-center">
             <span className="font-bold text-lg">Total Today:</span>
-            <span className={`font-bold text-lg ${todayTotalHours > 10 ? "text-orange-600" : "text-green-600"}`}>
+            <span className={`font-bold text-lg ${todayTotalHours < 10 ? "text-orange-600" : "text-green-600"}`}>
               {formatDuration(todayTotalHours)}
             </span>
           </div>

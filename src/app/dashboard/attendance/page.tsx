@@ -7,16 +7,11 @@ import EmployeeSelector from "./components/EmployeeSelector";
 import AttendanceHistory from "./components/AttendanceHistory";
 import { Suspense } from "react";
 import AttendanceWidget from "@/components/widgets/AttendanceWidget";
-import { useGetUserId } from "@/hooks/useGetUserId";
 
 export default function AttendancePage() {
-  const { isAdmin } = useAuth();
-  const params = useParams();
-  console.log(params.empid);
+  const { isAdmin, user } = useAuth();
 
-  const { userId } = useGetUserId(isAdmin, `${params.empid}`);
-
-  const selectedUser = `${params.empid}`;
+  const selectedUser = user?.id || "";
 
   return (
     <div className="max-w-6xl p-4 mx-auto">
@@ -30,7 +25,7 @@ export default function AttendancePage() {
 
         <main className="flex flex-col gap-4 sm:flex">
           {!isAdmin && <AttendanceWidget hideTodayShifts={true} />}
-          <AttendanceHistory userId={userId || ""} />
+          <AttendanceHistory userId={selectedUser} />
         </main>
       </Suspense>
     </div>

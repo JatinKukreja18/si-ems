@@ -6,9 +6,8 @@ import AdminDashboardWidget from "@/components/AdminDashboardWidget/AdminDashboa
 import DashboardHeader from "@/components/DashboardHeader";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Calendar1, CalendarPlus, ReceiptIndianRupee } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { NAVIGATIONS } from "@/lib/constants";
-import { Card } from "@/components/ui/card";
 
 export default function DashboardPage() {
   const { loading, isAdmin } = useAuth();
@@ -29,24 +28,6 @@ export default function DashboardPage() {
               View All Attendance <ArrowUpRight />
             </Button>
           </Link>
-          <div className="grid grid-cols-3 gap-4">
-            <Card className="flex items-center justify-center">
-              <Link href={NAVIGATIONS.LEAVES} className="flex items-center gap-1">
-                <CalendarPlus /> Leaves
-              </Link>
-            </Card>
-            <Card className="flex items-center justify-center">
-              <Link href={NAVIGATIONS.ATTENDANCE} className="flex items-center gap-1">
-                <Calendar1 />
-                Attendance
-              </Link>
-            </Card>
-            <Card className="flex items-center justify-center">
-              <Link href={NAVIGATIONS.PAYROLL} className="flex items-center gap-1">
-                <ReceiptIndianRupee /> Payroll
-              </Link>
-            </Card>
-          </div>
         </div>
       )}
     </div>

@@ -19,6 +19,8 @@ export interface Attendance {
   hours_worked: number | null;
   created_at: string;
   updated_at: string;
+  remote_clockout_reason: string | null;
+  status: "approved" | "pending_approval" | "rejected";
 }
 
 export type Employee = Pick<User, "id" | "name" | "email" | "emp_id">;

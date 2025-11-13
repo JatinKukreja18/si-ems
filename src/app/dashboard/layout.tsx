@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
+import FixedNavigation from "@/components/core/FixedNavigation";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -27,6 +28,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <>
       <Header />
       <main className="container m-auto">{children}</main>
+      <FixedNavigation />
     </>
   );
 }

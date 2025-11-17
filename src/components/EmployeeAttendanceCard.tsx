@@ -5,7 +5,7 @@ import Link from "next/link";
 import ShiftTimeRow from "./ShiftTimeRow";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { ROUTES } from "@/lib/constants";
+import { NAVIGATIONS } from "@/lib/constants";
 import OvertimeLabel from "./OvertimeLabel";
 
 export const EmployeeAttendanceCard = ({ data }: { data: EmployeeAttendance }) => {
@@ -14,7 +14,7 @@ export const EmployeeAttendanceCard = ({ data }: { data: EmployeeAttendance }) =
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <Card className="p-2 gap-1">
-      <Link href={ROUTES.DASHBOARD + "/" + employee.emp_id} key={employee.id} className="flex flex-col gap-1 rounded-lg">
+      <Link href={NAVIGATIONS.ATTENDANCE + "?user=" + employee.id} key={employee.id} className="flex flex-col gap-1 rounded-lg">
         <div className="px-2 pb-2 flex justify-between">
           <p className="font-semibold capitalize">{employee.name.toLowerCase()}</p>
           {isActive && <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium ml-auto mr-1">Active</span>}

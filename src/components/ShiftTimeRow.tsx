@@ -5,7 +5,8 @@ import { formatDuration, formatTime, LOCATION_LABEL } from "@/lib/utils";
 import { Attendance } from "@/types";
 import { useState } from "react";
 import { Badge } from "./ui/badge";
-import { CheckCircle, CheckCircle2, CheckIcon, CircleMinus, Clock10Icon, Crosshair, CrossIcon, X } from "lucide-react";
+import { CheckCircle2, CircleMinus, Clock10Icon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export default function ShiftTimeRow({
   record,
@@ -68,9 +69,14 @@ const StatusBadge = ({ status }: { status: Attendance["status"] }) => {
 
   if (status === "pending_approval")
     return (
-      <Badge variant={"pending"} className="p-1 leading-tight">
-        <Clock10Icon /> Pending
-      </Badge>
+      <Popover>
+        <PopoverTrigger>
+          <Clock10Icon width={18} className="text-light-warning" />
+        </PopoverTrigger>
+        <PopoverContent side="left" className="text-xs w-auto px-2 py-1 bg-background text-foreground" sideOffset={2}>
+          Approval Pending
+        </PopoverContent>
+      </Popover>
     );
 
   if (status === "approved") return <CheckCircle2 width={18} className="text-success" />;

@@ -8,11 +8,23 @@ import { useAuth } from "@/contexts/AuthContext";
 import { MONTHS_SHORT } from "@/lib/constants";
 import ShiftTimeRow from "@/components/ShiftTimeRow";
 import OvertimeLabel from "@/components/OvertimeLabel";
+import { Badge } from "@/components/ui/badge";
+import { formatDateWithWeekday } from "@/lib/utils";
+
+type View = "ALL" | "PENDING" | "APPROVED";
+const VIEW = {
+  ALL: "ALL",
+  PENDING: "PENDING",
+  APPROVED: "APPROVED",
+} as const;
+
+export type Location = (typeof VIEW)[keyof typeof VIEW];
 
 export default function AttendanceHistory({ userId }: { userId: string }) {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [view, setView] = useState<View>(VIEW.ALL);
   const { isAdmin } = useAuth();
-  const { currentMonth, monthlyAttendance, fetchMonthlyAttendance } = useAttendance(userId ?? "");
+  const { loading, currentMonth, monthlyAttendance, fetchMonthlyAttendance, pendingShifts, approvedShifts } = useAttendance(userId ?? "");
 
   useEffect(() => {
     if (userId) {
@@ -32,6 +44,19 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
     return null;
   }
 
+  let listData = [];
+  switch (view) {
+    case VIEW.PENDING:
+      listData = pendingShifts;
+      break;
+    case VIEW.APPROVED:
+      listData = approvedShifts;
+      break;
+    default:
+      listData = monthlyAttendance;
+      break;
+  }
+
   return (
     <>
       <Card className="p-3 sticky top-2">
@@ -49,16 +74,28 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
         </div>
       </Card>
       <Card className="p-3">
+        <div className="flex gap-2">
+          <Button size={"sm"} variant={view === VIEW.ALL ? "default" : "outline"} onClick={() => setView("ALL")}>
+            All
+          </Button>
+          <Button size={"sm"} variant={view === VIEW.PENDING ? "default" : "outline"} onClick={() => setView("PENDING")}>
+            Pending{" "}
+            <Badge variant={"default"} className="">
+              {pendingShifts.length}
+            </Badge>
+          </Button>
+          <Button size={"sm"} variant={view === VIEW.APPROVED ? "default" : "outline"} onClick={() => setView("APPROVED")}>
+            Approved{" "}
+          </Button>
+        </div>
         <div className="space-y-2">
-          {monthlyAttendance.map(({ date, shifts }) => {
+          {listData.map(({ date, shifts }) => {
             const isActive = shifts.some((s) => s.clock_in && !s.clock_out);
 
             return (
               <div key={date} className="flex flex-wrap items-center justify-between mb-4 gap-2">
                 <div className="flex justify-between items-center w-full">
-                  <h4 className="font-medium text-gray-700 w-full">
-                    {new Date(date).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}
-                  </h4>
+                  <h4 className="font-medium text-gray-700 w-full">{formatDateWithWeekday(date)}</h4>
                   {shifts.length > 0 && !isActive && <OvertimeLabel shifts={shifts} />}
                 </div>
                 <div className="w-full flex flex-col   gap-2">
@@ -74,9 +111,7 @@ export default function AttendanceHistory({ userId }: { userId: string }) {
               </div>
             );
           })}
-          {monthlyAttendance.length === 0 && (
-            <div className="h-22 w-full text-center flex items-center justify-center">No data to show</div>
-          )}
+          {listData.length === 0 && <div className="h-22 w-full text-center flex items-center justify-center">No data to show</div>}
         </div>
       </Card>
     </>

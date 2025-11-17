@@ -98,3 +98,11 @@ export function getLocalTime(date: Date = new Date()): string {
   const seconds = String(date.getSeconds()).padStart(2, "0");
   return `${hours}:${minutes}:${seconds}`;
 }
+
+export const formatDateWithWeekday = (dateString: string) => {
+  const d = new Date(dateString);
+  const month = d.toLocaleDateString("en-US", { month: "short" });
+  const day = d.getDate();
+  const weekday = d.toLocaleDateString("en-US", { weekday: "long" });
+  return `${month} ${day}, ${weekday}`;
+};

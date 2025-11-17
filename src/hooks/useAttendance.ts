@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
 import { Attendance } from "@/types";
 import { checkLocationPermission } from "@/lib/geolocation";
@@ -10,6 +10,10 @@ interface DailyAttendance {
   totalHours: number;
 }
 
+const MIDNIGHT_TIME = "23:59:59";
+const STATUS_PENDING = "pending_approval";
+const STATUS_APPROVED = "approved";
+
 export function useAttendance(userId: string) {
   // State
   const [activeSession, setActiveSession] = useState<Attendance | null>(null);
@@ -20,31 +24,37 @@ export function useAttendance(userId: string) {
   const currentMonth = new Date().getMonth();
 
   const autoCloseOpenShifts = async (todayISO: string) => {
-    const { data: openShifts } = await supabase
-      .from("attendance")
-      .select("*")
-      .eq("employee_id", userId)
-      .is("deleted_at", null)
-      .is("clock_out", null)
-      .lt("date", todayISO);
-
-    if (!openShifts?.length) return;
-
-    for (const shift of openShifts) {
-      const clockIn = new Date(`${shift.date}T${shift.clock_in}`);
-      const midnight = new Date(`${shift.date}T23:59:59`);
-      const hours = (midnight.getTime() - clockIn.getTime()) / (1000 * 60 * 60);
-
-      await supabase
+    try {
+      const { data: openShifts, error } = await supabase
         .from("attendance")
-        .update({
-          clock_out: "23:59:59",
-          hours_worked: hours,
-          status: "pending_approval",
-          approval_required_reason: "Auto-closed: Forgot to clock out",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", shift.id);
+        .select("*")
+        .eq("employee_id", userId)
+        .is("deleted_at", null)
+        .is("clock_out", null)
+        .lt("date", todayISO);
+
+      if (error) throw error;
+      if (!openShifts?.length) return;
+
+      for (const shift of openShifts) {
+        const clockIn = new Date(`${shift.date}T${shift.clock_in}`);
+        const midnight = new Date(`${shift.date}T${MIDNIGHT_TIME}`);
+        const hours = (midnight.getTime() - clockIn.getTime()) / (1000 * 60 * 60);
+
+        const { error: updateError } = await supabase
+          .from("attendance")
+          .update({
+            clock_out: MIDNIGHT_TIME,
+            hours_worked: hours,
+            status: STATUS_PENDING,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", shift.id);
+
+        if (updateError) console.error("Failed to auto-close shift:", updateError);
+      }
+    } catch (error) {
+      console.error("Auto-close error:", error);
     }
   };
   const groupShiftsByDate = (shifts: Attendance[]): Record<string, Attendance[]> => {
@@ -183,12 +193,13 @@ export function useAttendance(userId: string) {
         clock_out: time,
         hours_worked: hours,
         updated_at: new Date().toISOString(),
+        status: remoteReason ? STATUS_PENDING : STATUS_APPROVED,
       };
 
       if (remoteReason) {
         updateData.remote_clockout_reason = remoteReason;
-        updateData.status = "pending_approval";
-        updateData.approval_required_reason = `Remote clock-out: ${remoteReason}`;
+        updateData.status = STATUS_PENDING;
+        updateData.remote_clockout_reason = `Remote clock-out: ${remoteReason}`;
       }
 
       const { error } = await supabase.from("attendance").update(updateData).eq("id", activeSession.id);
@@ -207,6 +218,24 @@ export function useAttendance(userId: string) {
     }
   };
 
+  const pendingShifts = useMemo(() => {
+    return monthlyAttendance
+      .map((dateItem) => ({
+        ...dateItem,
+        shifts: dateItem.shifts.filter((s) => s.status === "pending_approval"),
+      }))
+      .filter((dateItem) => dateItem.shifts.length > 0);
+  }, [monthlyAttendance]);
+
+  const approvedShifts = useMemo(() => {
+    return monthlyAttendance
+      .map((dateItem) => ({
+        ...dateItem,
+        shifts: dateItem.shifts.filter((s) => s.approved_by !== null),
+      }))
+      .filter((dateItem) => dateItem.shifts.length > 0);
+  }, [monthlyAttendance]);
+
   useEffect(() => {
     if (userId) fetchAttendance();
   }, [userId]);
@@ -216,10 +245,12 @@ export function useAttendance(userId: string) {
     todayAttendance,
     monthlyAttendance,
     loading,
+    currentMonth,
     startShift,
     endShift,
     refetch: fetchAttendance,
     fetchMonthlyAttendance,
-    currentMonth,
+    pendingShifts,
+    approvedShifts,
   };
 }

@@ -22,6 +22,8 @@ export interface Attendance {
   created_at: string;
   updated_at: string;
   remote_clockout_reason: string | null;
+  approved_by: string | null;
+  deleted_by: string | null;
   status: "approved" | "pending_approval" | "rejected";
 }
 

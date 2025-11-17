@@ -1,13 +1,13 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEmployees } from "@/hooks/useEmployees";
-import { ROUTES } from "@/lib/constants";
+import { NAVIGATIONS } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 
 export default function EmployeeSelector({ selectedUser }: { selectedUser: string | null | undefined }) {
   const { employeesData } = useEmployees();
   const router = useRouter();
   function onEmployeeChange(emp_id: string) {
-    router.replace(ROUTES.DASHBOARD + "/" + emp_id + ROUTES.ATTENDANCE);
+    router.replace(NAVIGATIONS.ATTENDANCE + "?user=" + emp_id);
   }
   return (
     <Select value={selectedUser || ""} onValueChange={onEmployeeChange}>
@@ -17,7 +17,7 @@ export default function EmployeeSelector({ selectedUser }: { selectedUser: strin
       <SelectContent>
         <SelectGroup>
           {employeesData.map((employee) => (
-            <SelectItem key={employee.emp_id} value={employee.emp_id} className="capitalize">
+            <SelectItem key={employee.emp_id} value={employee.id} className="capitalize">
               {employee.name.toLowerCase()}
             </SelectItem>
           ))}

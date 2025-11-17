@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <>
       <Header />
-      <main className="container m-auto">{children}</main>
+      <main className="container m-auto pb-20">{children}</main>
       <FixedNavigation />
     </>
   );

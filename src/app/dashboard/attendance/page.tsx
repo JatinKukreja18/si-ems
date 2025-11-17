@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import EmployeeSelector from "./components/EmployeeSelector";
 import AttendanceHistory from "./components/AttendanceHistory";
 import { Suspense } from "react";
@@ -10,8 +10,8 @@ import AttendanceWidget from "@/components/widgets/AttendanceWidget";
 
 export default function AttendancePage() {
   const { isAdmin, user } = useAuth();
-
-  const selectedUser = user?.id || "";
+  const searchParams = useSearchParams();
+  const selectedUser = isAdmin ? searchParams.get("user") : user?.id;
 
   return (
     <div className="max-w-6xl p-4 mx-auto">
@@ -25,7 +25,7 @@ export default function AttendancePage() {
 
         <main className="flex flex-col gap-4 sm:flex">
           {!isAdmin && <AttendanceWidget hideTodayShifts={true} />}
-          <AttendanceHistory userId={selectedUser} />
+          <AttendanceHistory userId={selectedUser || ""} />
         </main>
       </Suspense>
     </div>

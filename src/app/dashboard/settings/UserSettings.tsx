@@ -3,10 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ItemContent, ItemTitle, ItemDescription, Item, ItemActions } from "@/components/ui/item";
 import { useEmployee } from "@/hooks/useEmployee";
+import { toast } from "sonner";
+import EditableField from "@/components/EditableField";
 
 export default function UserSettings({ userId }: { userId: string }) {
-  const { employeeData } = useEmployee(userId);
-  const [editableField, setEditableField] = useState<string | null>(null);
+  const { employeeData, updating, updateMobile } = useEmployee(userId);
+
+  const validateMobile = (mobile: string): { valid: boolean; error: string | null } => {
+    const mobileRegex = /^[0-9]{10}$/;
+    const isValid = mobileRegex.test(mobile.replace(/\s/g, ""));
+    return {
+      valid: isValid,
+      error: isValid ? null : "Enter Valid Number",
+    };
+  };
 
   if (!employeeData) return;
 
@@ -25,33 +35,18 @@ export default function UserSettings({ userId }: { userId: string }) {
             <ItemDescription>{employeeData.email}</ItemDescription>
           </ItemContent>
         </Item>
-        <Item variant="muted">
-          <ItemContent>
-            <ItemTitle>Mobile</ItemTitle>
-            {editableField === "mobile" ? (
-              <Input size={10} defaultValue={employeeData.mobile} className="text-sm" autoFocus placeholder="mobile" required />
-            ) : (
-              <ItemDescription>{employeeData.mobile}</ItemDescription>
-            )}
-          </ItemContent>
-          <ItemActions>
-            {editableField !== "mobile" && (
-              <Button size="sm" onClick={() => setEditableField("mobile")}>
-                Edit
-              </Button>
-            )}
-          </ItemActions>
-          {editableField === "mobile" && (
-            <div className="flex items-center gap-1 w-full -mt-2">
-              <Button size="sm" onClick={() => setEditableField("mobile")}>
-                Save
-              </Button>
-              <Button size="sm" variant={"link"} onClick={() => setEditableField(null)}>
-                Cancel
-              </Button>
-            </div>
-          )}
-        </Item>
+
+        <EditableField
+          title="Mobile"
+          value={employeeData.mobile}
+          name="mobile"
+          type="tel"
+          placeholder="10-digit mobile"
+          maxLength={10}
+          validate={validateMobile}
+          onSave={updateMobile}
+          disabled={updating}
+        />
 
         <Item variant="muted">
           <ItemContent>

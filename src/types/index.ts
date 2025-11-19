@@ -1,13 +1,19 @@
+export const ROLES = {
+  ADMIN: "admin",
+  MANAGER: "manager",
+  EMPLOYEE: "employee",
+};
+export type Roles = (typeof ROLES)[keyof typeof ROLES];
 export interface User {
   id: string;
   name: string;
   email: string;
   mobile: string;
-  role: "admin" | "employee";
-  base_salary: number;
+  role: Roles;
+  base_salary: number | null;
   created_at: string;
   emp_id: string;
-  assigned_hours: string | null;
+  assigned_hours: number | null;
   joining_date: string | null;
   avatar?: string;
 }
@@ -28,7 +34,7 @@ export interface Attendance {
   status: "approved" | "pending_approval" | "rejected";
 }
 
-export type Employee = Pick<User, "id" | "name" | "email" | "emp_id" | "avatar">;
+export type Employee = Pick<User, "id" | "name" | "email" | "emp_id" | "avatar" | "role">;
 
 export interface EmployeeAttendance {
   employee: Employee;

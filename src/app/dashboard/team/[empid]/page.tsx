@@ -3,6 +3,7 @@
 import { useEmployee } from "@/hooks/useEmployee";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
+import UserForm from "./UserForm";
 
 export default function EmployeePage() {
   const params = useParams();
@@ -19,8 +20,7 @@ export default function EmployeePage() {
 
   return (
     <div>
-      <h1>{employeeData.name}</h1>
-      <p>EMP ID: {employeeData.emp_id}</p>
+      <UserForm employeeData={employeeData} />
     </div>
   );
 }

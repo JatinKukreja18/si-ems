@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { Attendance, Employee, EmployeeAttendance } from "@/types";
+import { Attendance, Employee, EmployeeAttendance, ROLES } from "@/types";
 import { useEffect, useState } from "react";
 
 export function useEmployees() {
@@ -13,8 +13,8 @@ export function useEmployees() {
   const fetchEmployees = async () => {
     const { data: employees } = await supabase
       .from("users")
-      .select("id, name, email,emp_id")
-      .eq("role", "employee")
+      .select("id, name, email,emp_id,mobile,role")
+      .in("role", [ROLES.EMPLOYEE, ROLES.MANAGER])
       .order("name", { ascending: true });
 
     if (!employees) return;

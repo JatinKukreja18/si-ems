@@ -103,12 +103,48 @@ export function useEmployee(userId: string) {
     }
   };
 
+  const updateEmployee = async (updates: Partial<User>, id: string): Promise<{ success: boolean; error?: string }> => {
+    console.log(id);
+
+    if (!id) {
+      return { success: false, error: "User ID is required" };
+    }
+
+    setUpdating(true);
+
+    try {
+      const targetId = id;
+
+      const { data: updateData, error: updateError } = await supabase.from("users").update(updates).eq("id", targetId).select();
+
+      if (updateError) {
+        console.error("Error updating employee:", updateError);
+        return { success: false, error: "Failed to update employee data" };
+      }
+
+      if (!updateData || updateData.length === 0) {
+        return { success: false, error: "No user found to update" };
+      }
+
+      // Refresh employee data
+      await fetchEmployee();
+
+      return { success: true };
+    } catch (error: any) {
+      console.error("Update employee error:", error);
+      return { success: false, error: error.message || "An unexpected error occurred" };
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   return {
     employeeData,
     loading,
     updating,
     updateMobile,
     refetch: fetchEmployee,
+    updateEmployee,
     fetchByEmpId,
   };
 }

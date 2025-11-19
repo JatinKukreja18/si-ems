@@ -1,3 +1,4 @@
+"use client";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEmployees } from "@/hooks/useEmployees";
 import { NAVIGATIONS } from "@/lib/constants";

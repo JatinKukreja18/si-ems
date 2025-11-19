@@ -67,16 +67,30 @@ export const calculateTotalHours = (shifts: Attendance[]) => {
   }, 0);
 };
 
-export const calculateOverTime = (shifts: Attendance[]) => {
+export const calculateOverTime = (shifts: Attendance[], assignedHours: number = CONSTANTS.ASSIGNED_HOURS) => {
   const totalHours = calculateTotalHours(shifts);
-  const difference = totalHours - CONSTANTS.ASSIGNED_HOURS;
+  const difference = totalHours - assignedHours;
   const differenceLabel = `${difference < 0 ? "-" : "+"} ${formatHours(Math.abs(difference), true)}`;
 
   return {
     label: differenceLabel,
     numerical: difference,
+    totalHours: totalHours,
   };
 };
+
+export function calculateOvertimePay(baseSalary: number, totalHours: number, assignedHours: number = 10, workingDays: number = 30) {
+  // Calculate hourly rate
+  const totalRegularHours = assignedHours * workingDays;
+  const hourlyRate = baseSalary / totalRegularHours;
+  const overtimeHours = totalHours - assignedHours;
+  // Calculate overtime pay (no multiplier)
+  const overtimePay = hourlyRate * overtimeHours;
+  console.log(hourlyRate);
+  console.log(overtimeHours);
+
+  return Math.round(overtimePay * 100) / 100;
+}
 
 export function getDateISO(date: Date = new Date()): string {
   const year = date.getFullYear();

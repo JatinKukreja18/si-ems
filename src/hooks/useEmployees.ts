@@ -13,7 +13,7 @@ export function useEmployees() {
   const fetchEmployees = async () => {
     const { data: employees } = await supabase
       .from("users")
-      .select("id, name, email,emp_id,mobile,role")
+      .select("id, name, email, emp_id, mobile, role, base_salary, assigned_hours")
       .in("role", [ROLES.EMPLOYEE, ROLES.MANAGER])
       .order("name", { ascending: true });
 

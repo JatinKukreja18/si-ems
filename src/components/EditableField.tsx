@@ -11,7 +11,7 @@ interface EditableFieldProps {
   placeholder?: string;
   disabled?: boolean;
   maxLength?: number;
-  validate?: (value: string) => { valid: boolean; error?: string };
+  validate?: (value: string) => { valid: boolean; error?: string | null };
   onSave: (value: string) => Promise<{ success: boolean; error?: string }>;
   formatDisplay?: (value: string | number | null) => string;
   className?: string;
@@ -43,7 +43,6 @@ export default function EditableField({
     // Validate if validator provided
     if (validate) {
       const validation = validate(newValue);
-      console.log(validation);
       if (!validation.valid) {
         alert(validation.error || "Invalid input");
         return;

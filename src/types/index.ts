@@ -34,7 +34,7 @@ export interface Attendance {
   status: "approved" | "pending_approval" | "rejected";
 }
 
-export type Employee = Pick<User, "id" | "name" | "email" | "emp_id" | "avatar" | "role">;
+export type Employee = Pick<User, "id" | "name" | "email" | "emp_id" | "avatar" | "role" | "assigned_hours" | "base_salary">;
 
 export interface EmployeeAttendance {
   employee: Employee;

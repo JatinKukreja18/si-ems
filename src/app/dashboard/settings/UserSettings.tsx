@@ -1,9 +1,5 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ItemContent, ItemTitle, ItemDescription, Item, ItemActions } from "@/components/ui/item";
 import { useEmployee } from "@/hooks/useEmployee";
-import { toast } from "sonner";
 import EditableField from "@/components/EditableField";
 
 export default function UserSettings({ userId }: { userId: string }) {

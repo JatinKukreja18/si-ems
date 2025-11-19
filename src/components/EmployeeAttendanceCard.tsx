@@ -18,7 +18,7 @@ export const EmployeeAttendanceCard = ({ data }: { data: EmployeeAttendance }) =
         <div className="px-2 pb-2 flex justify-between">
           <p className="font-semibold capitalize">{employee.name.toLowerCase()}</p>
           {isActive && <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium ml-auto mr-1">Active</span>}
-          {!isActive && todayShifts.length > 0 && <OvertimeLabel shifts={todayShifts} />}
+          {!isActive && todayShifts.length > 0 && <OvertimeLabel shifts={todayShifts} assignedHours={employee.assigned_hours || 0} />}
         </div>
       </Link>
 

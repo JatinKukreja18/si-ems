@@ -1,45 +1,57 @@
 import Link from "next/link";
-import { Calendar1, CalendarPlus, HouseIcon, ReceiptIndianRupee, WrenchIcon } from "lucide-react";
+import { Calendar1, CalendarPlus, HouseIcon, ReceiptIndianRupee, UsersIcon, WrenchIcon } from "lucide-react";
 import { NAVIGATIONS } from "@/lib/constants";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 const MENUS = [
   {
     label: "Home",
     path: NAVIGATIONS.DASHBOARD,
     icon: <HouseIcon />,
+    available: true,
   },
-  // {
-  //   label: "Leaves",
-  //   path: NAVIGATIONS.LEAVES,
-  //   icon: <CalendarPlus />,
-  // },
+  {
+    label: "Team",
+    path: NAVIGATIONS.TEAM,
+    icon: <UsersIcon />,
+    adminOnly: true,
+    available: true,
+  },
+  {
+    label: "Leaves",
+    path: NAVIGATIONS.LEAVES,
+    icon: <CalendarPlus />,
+    available: false,
+  },
   {
     label: "Attendance",
     path: NAVIGATIONS.ATTENDANCE,
     icon: <Calendar1 />,
+    available: true,
   },
-  // {
-  //   label: "Payroll",
-  //   path: NAVIGATIONS.PAYROLL,
-  //   icon: <ReceiptIndianRupee />,
-  // },
+  {
+    label: "Payroll",
+    path: NAVIGATIONS.PAYROLL,
+    icon: <ReceiptIndianRupee />,
+    available: false,
+  },
   {
     label: "Settings",
     path: NAVIGATIONS.SETTINGS,
     icon: <WrenchIcon />,
+    available: true,
   },
 ];
 
 export default function FixedNavigation() {
   const pathname = usePathname();
-
+  const { isAdmin, user } = useAuth();
+  const menus = isAdmin ? MENUS.filter((item) => item.available) : MENUS.filter((item) => !item.adminOnly);
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-4 py-3 flex justify-between items-center shadow-lg">
-      {MENUS.map((item) => (
+      {menus.map((item) => (
         <div className="flex-1" key={item.path}>
-          <>{console.log(pathname)}</>
-
           <Link
             href={item.path}
             className={`flex flex-col items-center   hover:opacity-80 ${

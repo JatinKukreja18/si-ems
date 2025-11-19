@@ -9,15 +9,41 @@ export function useEmployee(userId: string) {
 
   useEffect(() => {
     fetchEmployee();
-  }, []);
+  }, [userId]);
 
   const fetchEmployee = async () => {
-    const { data: employee } = await supabase.from("users").select("*").eq("id", userId);
+    if (!userId || userId.length === 0) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    const { data: employee } = await supabase.from("users").select("*").eq("id", userId).maybeSingle();
 
     if (!employee) return;
 
-    setEmployeeData(employee[0]);
+    setEmployeeData(employee);
     setLoading(false);
+  };
+
+  const fetchByEmpId = async (empId: string) => {
+    if (!empId) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    const { data: employee, error } = await supabase.from("users").select("*").eq("emp_id", empId).maybeSingle(); // ✅ Use maybeSingle instead of single
+
+    if (error) {
+      console.error("Error fetching employee by empId:", error);
+      setEmployeeData(null);
+      setLoading(false);
+      return null;
+    }
+
+    setEmployeeData(employee);
+    setLoading(false);
+    return employee;
   };
 
   const updateMobile = async (newMobile: string): Promise<{ success: boolean; error?: string }> => {
@@ -82,5 +108,7 @@ export function useEmployee(userId: string) {
     loading,
     updating,
     updateMobile,
+    refetch: fetchEmployee,
+    fetchByEmpId,
   };
 }

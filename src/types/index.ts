@@ -9,6 +9,7 @@ export interface User {
   emp_id: string;
   assigned_hours: string | null;
   joining_date: string | null;
+  avatar?: string;
 }
 
 export interface Attendance {
@@ -27,7 +28,7 @@ export interface Attendance {
   status: "approved" | "pending_approval" | "rejected";
 }
 
-export type Employee = Pick<User, "id" | "name" | "email" | "emp_id">;
+export type Employee = Pick<User, "id" | "name" | "email" | "emp_id" | "avatar">;
 
 export interface EmployeeAttendance {
   employee: Employee;
